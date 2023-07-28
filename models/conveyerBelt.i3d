@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<i3D name="conveyerBelt.i3d" version="1.6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://i3d.giants.ch/schema/i3d-1.6.xsd">
+  <Asset>
+    <Export program="GIANTS Editor 64bit" version="9.0.4"/>
+  </Asset>
+
+  <Files>
+    <File fileId="6" filename="textures/DiamondPlate008D_2K_Color.dds"/>
+    <File fileId="7" filename="textures/DiamondPlate008D_2K_NormalGL.dds"/>
+    <File fileId="8" filename="textures/DiamondPlate008D_specular.dds"/>
+    <File fileId="3" filename="textures/PaintedMetal007_2K_Color.dds"/>
+    <File fileId="4" filename="textures/PaintedMetal007_2K_NormalDX.dds"/>
+    <File fileId="5" filename="textures/PaintedMetal007_2K_specular.dds"/>
+  </Files>
+
+
+  <Materials>
+    <Material name="i3d_default_material" materialId="333" diffuseColor="0.8 0.8 0.8 1" specularColor="0.6 1 0">
+    </Material>
+    <Material name="rail_mat" materialId="334">
+      <Texture fileId="3"/>
+      <Normalmap fileId="4"/>
+      <Glossmap fileId="5"/>
+    </Material>
+    <Material name="role_front_mat" materialId="335">
+      <Texture fileId="6"/>
+      <Normalmap fileId="7"/>
+      <Glossmap fileId="8"/>
+    </Material>
+    <Material name="role_side_mat" materialId="336" diffuseColor="0.0980392 0.0980392 0.0980392 1" specularColor="0.498039 1 0">
+    </Material>
+  </Materials>
+
+
+  <Shapes externalShapesFile="conveyerBelt.i3d.shapes">
+  </Shapes>
+
+
+  <Dynamics>
+  </Dynamics>
+
+  <Scene>
+      <TransformGroup name="BalePackingUnit" nodeId="348">
+        <TransformGroup name="Areas" nodeId="349">
+          <TransformGroup name="clearAreas" nodeId="350">
+            <TransformGroup name="clearArea1Start" translation="6 0 1.5" nodeId="351">
+              <TransformGroup name="clearArea1Height" translation="0 0 -3" nodeId="352"/>
+              <TransformGroup name="clearArea1Width" translation="-12 0 0" nodeId="353"/>
+            </TransformGroup>
+          </TransformGroup>
+          <TransformGroup name="indoorAreas" nodeId="354">
+            <TransformGroup name="indoorArea1Start" translation="1 0 -1" nodeId="355">
+              <TransformGroup name="indoorArea1Height" translation="0 0 2" nodeId="356"/>
+              <TransformGroup name="indoorArea1Width" translation="-2 0 0" nodeId="357"/>
+            </TransformGroup>
+          </TransformGroup>
+          <TransformGroup name="levelAreas" nodeId="358">
+            <TransformGroup name="levelArea1Start" translation="6 0 1.5" nodeId="359">
+              <TransformGroup name="levelArea1Height" translation="0 0 -3" nodeId="360"/>
+              <TransformGroup name="levelArea1Width" translation="-12 0 0" nodeId="361"/>
+            </TransformGroup>
+          </TransformGroup>
+          <TransformGroup name="testAreas" nodeId="362">
+            <TransformGroup name="testArea1Start" translation="6 0 -1.5" nodeId="363">
+              <TransformGroup name="testArea1End" translation="-12 0 3" nodeId="364"/>
+            </TransformGroup>
+          </TransformGroup>
+          <TransformGroup name="tipOcclusionUpdateAreas" nodeId="365">
+            <TransformGroup name="tipOcclusionUpdateArea1Start" translation="6 0 -1.5" nodeId="366">
+              <TransformGroup name="tipOcclusionUpdateArea1End" translation="-12 0 3" nodeId="367"/>
+            </TransformGroup>
+          </TransformGroup>
+        </TransformGroup>
+        <TransformGroup name="Collisions" nodeId="368">
+          <Shape shapeId="1" name="BeltCollision" translation="0 0.21 0" static="true" nodeId="369" materialIds="333" nonRenderable="true"/>
+        </TransformGroup>
+        <TransformGroup name="Visuals" nodeId="370">
+          <Shape shapeId="2" name="ConveyerBeltInput" translation="3 0.105 0.65" clipDistance="250" nodeId="371" materialIds="334" castsShadows="true" receiveShadows="true">
+            <Shape shapeId="3" name="BeltInputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="372" materialIds="335" castsShadows="true" receiveShadows="true">
+              <Shape shapeId="4" name="BeltInputSideRoles" clipDistance="250" nodeId="373" materialIds="336"/>
+            </Shape>
+            <Shape shapeId="5" name="ConveyerBeltInputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="374" materialIds="334" castsShadows="true" receiveShadows="true"/>
+          </Shape>
+          <Shape shapeId="2" name="ConveyerBeltOutput" translation="-3 0.105 0.65" clipDistance="250" nodeId="375" materialIds="334" castsShadows="true" receiveShadows="true">
+            <Shape shapeId="3" name="BeltOutputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="376" materialIds="335" castsShadows="true" receiveShadows="true">
+              <Shape shapeId="4" name="BeltOutputSideRoles" clipDistance="250" nodeId="377" materialIds="336"/>
+            </Shape>
+            <Shape shapeId="5" name="ConveyerBeltOutputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="378" materialIds="334" castsShadows="true" receiveShadows="true"/>
+          </Shape>
+          <Shape shapeId="6" name="Cube" translation="0 1 0" static="true" clipDistance="250" nodeId="379" materialIds="333" castsShadows="true" receiveShadows="true"/>
+        </TransformGroup>
+      </TransformGroup>
+  </Scene>
+
+</i3D>

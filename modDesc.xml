@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<modDesc descVersion="76">
+	<author>Achimobil</author>
+	<version>0.1.0.0</version>
+	
+	<title>
+		<en>Bale Converter</en>
+	</title>
+	
+	<description>
+		<en><![CDATA[---]]></en>
+	</description>
+	
+	<multiplayer supported="true"/>
+	<iconFilename>icon_mod.dds</iconFilename>
+	
+	<storeItems>
+		<storeItem xmlFilename="baleConverterWithConveyerBelt.xml"/>
+	</storeItems>
+</modDesc>
