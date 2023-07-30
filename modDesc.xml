@@ -17,4 +17,14 @@
 	<storeItems>
 		<storeItem xmlFilename="baleConverterWithConveyerBelt.xml"/>
 	</storeItems>
+	
+	<placeableSpecializations>
+		<specialization name="baleMoveSpecialization" className="BaleMoveSpecialization" filename="scripts/baleMoveSpecialization.lua"/>
+	</placeableSpecializations>
+		
+	<placeableTypes>
+		<type name="baleConverter" parent="simplePlaceable" filename="$dataS/scripts/placeables/Placeable.lua">
+			<specialization name="baleMoveSpecialization"/>
+		</type>
+	</placeableTypes>	
 </modDesc>

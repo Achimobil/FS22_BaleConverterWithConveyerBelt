@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<placeable xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="simplePlaceable" xsi:noNamespaceSchemaLocation="../../../../shared/xml/schema/placeable.xsd">
+<placeable xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="baleConverter" xsi:noNamespaceSchemaLocation="../../../../shared/xml/schema/placeable.xsd">
   <storeData>
     <dailyUpkeep>200</dailyUpkeep>
     <image>store/store_baleConverter.dds</image>
@@ -42,6 +42,20 @@
       <place template="smallImp" />
     </sounds>
   </placement>
+  <baleMoves>
+    <baleMove onBeltTrigger="InputBeltTrigger" jointBaseNode="BeltCollision" anchorNode="BeltCollision">
+      <uvAnimations>
+        <uvAnimation node="BeltInputInnerRoles" to="0.5" parameter="0" speed="0.05" />
+        <!-- chain belt -->
+      </uvAnimations>
+    </baleMove>
+    <baleMove onBeltTrigger="OutputBeltTrigger" jointBaseNode="BeltCollision" anchorNode="BeltCollisionOutput">
+      <uvAnimations>
+        <uvAnimation node="BeltOutputInnerRoles" to="0.5" parameter="0" speed="0.05" />
+        <!-- chain belt -->
+      </uvAnimations>
+    </baleMove>
+  </baleMoves>
   <i3dMappings>
     <i3dMapping id="clearArea1Start" node="0>0|0|0" />
     <i3dMapping id="clearArea1Height" node="0>0|0|0|0" />
@@ -56,5 +70,11 @@
     <i3dMapping id="testArea1End" node="0>0|3|0|0" />
     <i3dMapping id="tipOcclusionUpdateArea1Start" node="0>0|4|0" />
     <i3dMapping id="tipOcclusionUpdateArea1End" node="0>0|4|0|0" />
+    <i3dMapping id="BeltCollision" node="0>1|0" />
+    <i3dMapping id="BeltCollisionOutput" node="0>1|1" />
+    <i3dMapping id="BeltInputInnerRoles" node="0>2|0|0" />
+    <i3dMapping id="InputBeltTrigger" node="0>2|0|2" />
+    <i3dMapping id="BeltOutputInnerRoles" node="0>2|1|0" />
+    <i3dMapping id="OutputBeltTrigger" node="0>2|1|2" />
   </i3dMappings>
 </placeable>
