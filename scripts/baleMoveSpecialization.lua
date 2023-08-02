@@ -12,6 +12,8 @@ function BaleMoveItem.new(isServer, isClient, customMt)
 	self.jointToInfo = {}
 	self.speed = 3
 	self.motorSpeed = -10
+	self.baleInStopTrigger = {}
+	self.baleInStopTriggerCount = 0
 
 	return self
 end
@@ -19,6 +21,11 @@ end
 function BaleMoveItem:update(dt)
 	BaleMoveItem:superClass().update(self, dt)
 	-- print("BaleMoveItem:update(dt)")
+	
+	-- wenn stop trigger was erfasst hat, nichts weiteres hier machen
+	if self.baleInStopTriggerCount ~= 0 then
+		return;
+	end
 	
 	-- hier jetzt den ballen bewegen, wenn nicht attached oder so
 	if self.isServer then
@@ -151,6 +158,7 @@ end
 
 function BaleMoveSpecialization.registerFunctions(placeableType)
 	SpecializationUtil.registerFunction(placeableType, "onBeltTriggerCallback", BaleMoveSpecialization.onBeltTriggerCallback)
+	SpecializationUtil.registerFunction(placeableType, "onStopTriggerCallback", BaleMoveSpecialization.onStopTriggerCallback)
 end
 
 function BaleMoveSpecialization.registerEventListeners(placeableType)
@@ -164,7 +172,8 @@ function BaleMoveSpecialization.registerXMLPaths(schema, basePath)
     
     schema:register(XMLValueType.NODE_INDEX, basePath .. ".baleMoves.baleMove(?)#onBeltTrigger", "Trigger node to detect bales whch should be moved")
     schema:register(XMLValueType.NODE_INDEX, basePath .. ".baleMoves.baleMove(?)#jointBaseNode", "Base node for joint between belt and bale")
-    schema:register(XMLValueType.NODE_INDEX, basePath .. ".baleMoves.baleMove(?)#anchorNode", "kein plan bis jetzt")
+    schema:register(XMLValueType.NODE_INDEX, basePath .. ".baleMoves.baleMove(?)#anchorNode", "target note for movement to")
+    schema:register(XMLValueType.NODE_INDEX, basePath .. ".baleMoves.baleMove(?)#stopTrigger", "Trigger to Stop movement at the end ob the belt")
 	
 	schema:register(XMLValueType.NODE_INDEX, basePath .. ".baleMoves.baleMove(?).uvAnimations.uvAnimation(?)#node", "")
 	schema:register(XMLValueType.INT, basePath .. ".baleMoves.baleMove(?).uvAnimations.uvAnimation(?)#parameter", "")
@@ -181,6 +190,7 @@ function BaleMoveSpecialization:onLoad(savegame)
     self.spec_baleMove = {};
     local spec =  self.spec_baleMove;
 	spec.baleMoveItems = {}
+	spec.stopTriggerToBeltTrigger = {}
 	
 	
     local xmlFile = self.xmlFile
@@ -190,8 +200,10 @@ function BaleMoveSpecialization:onLoad(savegame)
 		baleMoveItem.onBeltTriggerId = xmlFile:getValue(key .. "#onBeltTrigger", nil, self.components, self.i3dMappings);
 		baleMoveItem.beltJointBaseNode = xmlFile:getValue(key .. "#jointBaseNode", nil, self.components, self.i3dMappings)
 		baleMoveItem.beltAnchorNode = xmlFile:getValue(key .. "#anchorNode", nil, self.components, self.i3dMappings)
+		baleMoveItem.stopTriggerId = xmlFile:getValue(key .. "#stopTrigger", nil, self.components, self.i3dMappings)
 		
 		addTrigger(baleMoveItem.onBeltTriggerId, "onBeltTriggerCallback", self);
+		addTrigger(baleMoveItem.stopTriggerId, "onStopTriggerCallback", self);
 		
 		baleMoveItem.uvAnimations = {}
 
@@ -211,6 +223,7 @@ function BaleMoveSpecialization:onLoad(savegame)
 		end)
 
 		spec.baleMoveItems[baleMoveItem.onBeltTriggerId] = baleMoveItem;
+		spec.stopTriggerToBeltTrigger[baleMoveItem.stopTriggerId] = baleMoveItem.onBeltTriggerId
 	end)
 end
 
@@ -241,6 +254,30 @@ function BaleMoveSpecialization:onBeltTriggerCallback(triggerId, otherId, onEnte
 
 				currentBaleMoveItem.balesOnBelt[bale] = nil
 				currentBaleMoveItem:raiseActive();
+			end
+		end
+	end
+	
+end
+
+function BaleMoveSpecialization:onStopTriggerCallback(triggerId, otherId, onEnter, onLeave, onStay)
+    local spec =  self.spec_baleMove;
+	local currentBaleMoveItem = spec.baleMoveItems[spec.stopTriggerToBeltTrigger[triggerId]];
+	-- print("onStopTriggerCallback")
+	
+	local bale = g_currentMission.nodeToObject[otherId];
+
+	-- put the bale in the stop list to stop the moving until it is free again
+	if bale ~= nil and bale:isa(Bale) then
+		if onEnter then
+			if currentBaleMoveItem.baleInStopTrigger[bale] == nil then
+				currentBaleMoveItem.baleInStopTrigger[bale] = true;
+				currentBaleMoveItem.baleInStopTriggerCount = currentBaleMoveItem.baleInStopTriggerCount + 1;
+			end
+		elseif onLeave then
+			if currentBaleMoveItem.baleInStopTrigger[bale] ~= nil then
+				currentBaleMoveItem.baleInStopTrigger[bale] = nil
+				currentBaleMoveItem.baleInStopTriggerCount = currentBaleMoveItem.baleInStopTriggerCount - 1;
 			end
 		end
 	end

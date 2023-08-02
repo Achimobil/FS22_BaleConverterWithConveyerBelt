@@ -43,13 +43,13 @@
     </sounds>
   </placement>
   <baleMoves>
-    <baleMove onBeltTrigger="InputBeltTrigger" jointBaseNode="BeltCollision" anchorNode="BeltCollision">
+    <baleMove onBeltTrigger="InputBeltTrigger" jointBaseNode="BeltCollision" anchorNode="BeltCollision" stopTrigger="InputBeltTriggerStop">
       <uvAnimations>
         <uvAnimation node="BeltInputInnerRoles" to="0.5" parameter="0" speed="0.05" />
         <!-- chain belt -->
       </uvAnimations>
     </baleMove>
-    <baleMove onBeltTrigger="OutputBeltTrigger" jointBaseNode="BeltCollision" anchorNode="BeltCollisionOutput">
+    <baleMove onBeltTrigger="OutputBeltTrigger" jointBaseNode="BeltCollision" anchorNode="BeltCollisionOutput" stopTrigger="OutputBeltTriggerStop">
       <uvAnimations>
         <uvAnimation node="BeltOutputInnerRoles" to="0.5" parameter="0" speed="0.05" />
         <!-- chain belt -->
@@ -74,7 +74,9 @@
     <i3dMapping id="BeltCollisionOutput" node="0>1|1" />
     <i3dMapping id="BeltInputInnerRoles" node="0>2|0|0" />
     <i3dMapping id="InputBeltTrigger" node="0>2|0|2" />
+    <i3dMapping id="InputBeltTriggerStop" node="0>2|0|3" />
     <i3dMapping id="BeltOutputInnerRoles" node="0>2|1|0" />
     <i3dMapping id="OutputBeltTrigger" node="0>2|1|2" />
+    <i3dMapping id="OutputBeltTriggerStop" node="0>2|1|3" />
   </i3dMappings>
 </placeable>
