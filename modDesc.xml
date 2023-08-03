@@ -20,11 +20,13 @@
 	
 	<placeableSpecializations>
 		<specialization name="baleMoveSpecialization" className="BaleMoveSpecialization" filename="scripts/baleMoveSpecialization.lua"/>
+		<specialization name="baleConvertSpecialization" className="BaleConvertSpecialization" filename="scripts/baleConvertSpecialization.lua"/>
 	</placeableSpecializations>
 		
 	<placeableTypes>
 		<type name="baleConverter" parent="simplePlaceable" filename="$dataS/scripts/placeables/Placeable.lua">
 			<specialization name="baleMoveSpecialization"/>
+			<specialization name="baleConvertSpecialization"/>
 		</type>
 	</placeableTypes>	
 </modDesc>

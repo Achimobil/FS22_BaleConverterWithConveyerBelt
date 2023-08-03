@@ -56,6 +56,7 @@
       </uvAnimations>
     </baleMove>
   </baleMoves>
+  <baleConvert triggerNode="BaleInputTrigger" creationNode="BaleOutputNode" />
   <i3dMappings>
     <i3dMapping id="clearArea1Start" node="0>0|0|0" />
     <i3dMapping id="clearArea1Height" node="0>0|0|0|0" />
@@ -72,11 +73,13 @@
     <i3dMapping id="tipOcclusionUpdateArea1End" node="0>0|4|0|0" />
     <i3dMapping id="BeltCollision" node="0>1|0" />
     <i3dMapping id="BeltCollisionOutput" node="0>1|1" />
-    <i3dMapping id="BeltInputInnerRoles" node="0>2|0|0" />
-    <i3dMapping id="InputBeltTrigger" node="0>2|0|2" />
-    <i3dMapping id="InputBeltTriggerStop" node="0>2|0|3" />
-    <i3dMapping id="BeltOutputInnerRoles" node="0>2|1|0" />
-    <i3dMapping id="OutputBeltTrigger" node="0>2|1|2" />
-    <i3dMapping id="OutputBeltTriggerStop" node="0>2|1|3" />
+    <i3dMapping id="BaleInputTrigger" node="0>2|0|0" />
+    <i3dMapping id="BeltInputInnerRoles" node="0>2|0|1" />
+    <i3dMapping id="InputBeltTrigger" node="0>2|0|3" />
+    <i3dMapping id="InputBeltTriggerStop" node="0>2|0|4" />
+    <i3dMapping id="BaleOutputNode" node="0>2|1|0" />
+    <i3dMapping id="BeltOutputInnerRoles" node="0>2|1|1" />
+    <i3dMapping id="OutputBeltTrigger" node="0>2|1|3" />
+    <i3dMapping id="OutputBeltTriggerStop" node="0>2|1|4" />
   </i3dMappings>
 </placeable>

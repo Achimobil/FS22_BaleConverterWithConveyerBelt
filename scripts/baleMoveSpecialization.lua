@@ -159,6 +159,8 @@ end
 function BaleMoveSpecialization.registerFunctions(placeableType)
 	SpecializationUtil.registerFunction(placeableType, "onBeltTriggerCallback", BaleMoveSpecialization.onBeltTriggerCallback)
 	SpecializationUtil.registerFunction(placeableType, "onStopTriggerCallback", BaleMoveSpecialization.onStopTriggerCallback)
+	SpecializationUtil.registerFunction(placeableType, "onDeleteBale", BaleMoveSpecialization.onDeleteBale)
+	SpecializationUtil.registerFunction(placeableType, "onDeleteBaleFromStop", BaleMoveSpecialization.onDeleteBaleFromStop)
 end
 
 function BaleMoveSpecialization.registerEventListeners(placeableType)
@@ -244,6 +246,9 @@ function BaleMoveSpecialization:onBeltTriggerCallback(triggerId, otherId, onEnte
 					xDirection = 0
 				}
 				currentBaleMoveItem.balesOnBelt[bale] = info
+				if bale.addDeleteListener ~= nil then
+					bale:addDeleteListener(self, "onDeleteBale")
+				end
 				currentBaleMoveItem:raiseActive();
 			end
 		elseif onLeave then
@@ -253,6 +258,9 @@ function BaleMoveSpecialization:onBeltTriggerCallback(triggerId, otherId, onEnte
 				currentBaleMoveItem:removeBaleJoint(info)
 
 				currentBaleMoveItem.balesOnBelt[bale] = nil
+				if bale.removeDeleteListener ~= nil then
+					bale:removeDeleteListener(self, "onDeleteBale")
+				end
 				currentBaleMoveItem:raiseActive();
 			end
 		end
@@ -273,11 +281,17 @@ function BaleMoveSpecialization:onStopTriggerCallback(triggerId, otherId, onEnte
 			if currentBaleMoveItem.baleInStopTrigger[bale] == nil then
 				currentBaleMoveItem.baleInStopTrigger[bale] = true;
 				currentBaleMoveItem.baleInStopTriggerCount = currentBaleMoveItem.baleInStopTriggerCount + 1;
+				if bale.addDeleteListener ~= nil then
+					bale:addDeleteListener(self, "onDeleteBaleFromStop")
+				end
 			end
 		elseif onLeave then
 			if currentBaleMoveItem.baleInStopTrigger[bale] ~= nil then
 				currentBaleMoveItem.baleInStopTrigger[bale] = nil
 				currentBaleMoveItem.baleInStopTriggerCount = currentBaleMoveItem.baleInStopTriggerCount - 1;
+				if bale.removeDeleteListener ~= nil then
+					bale:removeDeleteListener(self, "onDeleteBaleFromStop")
+				end
 			end
 		end
 	end
@@ -297,5 +311,26 @@ function BaleMoveSpecialization:onDelete()
 	local spec =  self.spec_baleMove;
     for _, baleMoveItem in pairs(spec.baleMoveItems) do
 		removeTrigger(baleMoveItem.onBeltTriggerId)
+	end
+end
+
+function BaleMoveSpecialization:onDeleteBale(object)
+	local spec =  self.spec_baleMove;
+
+    for _, baleMoveItem in pairs(spec.baleMoveItems) do
+		if baleMoveItem.balesOnBelt[object] ~= nil then
+			baleMoveItem.balesOnBelt[object] = nil
+		end
+	end
+end
+
+function BaleMoveSpecialization:onDeleteBaleFromStop(object)
+	local spec =  self.spec_baleMove;
+
+    for _, baleMoveItem in pairs(spec.baleMoveItems) do
+		if baleMoveItem.baleInStopTrigger[object] ~= nil then
+			baleMoveItem.balesOnBelt[object] = nil
+			baleMoveItem.baleInStopTriggerCount = baleMoveItem.baleInStopTriggerCount - 1;
+		end
 	end
 end

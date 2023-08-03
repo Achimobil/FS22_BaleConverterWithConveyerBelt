@@ -47,59 +47,61 @@
   </Dynamics>
 
   <Scene>
-      <TransformGroup name="BalePackingUnit" nodeId="25">
-        <TransformGroup name="Areas" nodeId="26">
-          <TransformGroup name="clearAreas" nodeId="27">
-            <TransformGroup name="clearArea1Start" translation="6 0 1.5" nodeId="28">
-              <TransformGroup name="clearArea1Height" translation="0 0 -3" nodeId="29"/>
-              <TransformGroup name="clearArea1Width" translation="-12 0 0" nodeId="30"/>
+      <TransformGroup name="BalePackingUnit" nodeId="26">
+        <TransformGroup name="Areas" nodeId="27">
+          <TransformGroup name="clearAreas" nodeId="28">
+            <TransformGroup name="clearArea1Start" translation="6 0 1.5" nodeId="29">
+              <TransformGroup name="clearArea1Height" translation="0 0 -3" nodeId="30"/>
+              <TransformGroup name="clearArea1Width" translation="-12 0 0" nodeId="31"/>
             </TransformGroup>
           </TransformGroup>
-          <TransformGroup name="indoorAreas" nodeId="31">
-            <TransformGroup name="indoorArea1Start" translation="1 0 -1" nodeId="32">
-              <TransformGroup name="indoorArea1Height" translation="0 0 2" nodeId="33"/>
-              <TransformGroup name="indoorArea1Width" translation="-2 0 0" nodeId="34"/>
+          <TransformGroup name="indoorAreas" nodeId="32">
+            <TransformGroup name="indoorArea1Start" translation="1 0 -1" nodeId="33">
+              <TransformGroup name="indoorArea1Height" translation="0 0 2" nodeId="34"/>
+              <TransformGroup name="indoorArea1Width" translation="-2 0 0" nodeId="35"/>
             </TransformGroup>
           </TransformGroup>
-          <TransformGroup name="levelAreas" nodeId="35">
-            <TransformGroup name="levelArea1Start" translation="6 0 1.5" nodeId="36">
-              <TransformGroup name="levelArea1Height" translation="0 0 -3" nodeId="37"/>
-              <TransformGroup name="levelArea1Width" translation="-12 0 0" nodeId="38"/>
+          <TransformGroup name="levelAreas" nodeId="36">
+            <TransformGroup name="levelArea1Start" translation="6 0 1.5" nodeId="37">
+              <TransformGroup name="levelArea1Height" translation="0 0 -3" nodeId="38"/>
+              <TransformGroup name="levelArea1Width" translation="-12 0 0" nodeId="39"/>
             </TransformGroup>
           </TransformGroup>
-          <TransformGroup name="testAreas" nodeId="39">
-            <TransformGroup name="testArea1Start" translation="6 0 -1.5" nodeId="40">
-              <TransformGroup name="testArea1End" translation="-12 0 3" nodeId="41"/>
+          <TransformGroup name="testAreas" nodeId="40">
+            <TransformGroup name="testArea1Start" translation="6 0 -1.5" nodeId="41">
+              <TransformGroup name="testArea1End" translation="-12 0 3" nodeId="42"/>
             </TransformGroup>
           </TransformGroup>
-          <TransformGroup name="tipOcclusionUpdateAreas" nodeId="42">
-            <TransformGroup name="tipOcclusionUpdateArea1Start" translation="6 0 -1.5" nodeId="43">
-              <TransformGroup name="tipOcclusionUpdateArea1End" translation="-12 0 3" nodeId="44"/>
+          <TransformGroup name="tipOcclusionUpdateAreas" nodeId="43">
+            <TransformGroup name="tipOcclusionUpdateArea1Start" translation="6 0 -1.5" nodeId="44">
+              <TransformGroup name="tipOcclusionUpdateArea1End" translation="-12 0 3" nodeId="45"/>
             </TransformGroup>
           </TransformGroup>
         </TransformGroup>
-        <TransformGroup name="Collisions" nodeId="45">
-          <Shape shapeId="1" name="BeltCollision" translation="0.479197 0.21681 -0.0508206" static="true" nodeId="46" materialIds="5" nonRenderable="true"/>
-          <Shape shapeId="1" name="BeltCollisionOutput" translation="-5.5208 0.21681 -0.0508206" static="true" nodeId="47" materialIds="5" nonRenderable="true"/>
+        <TransformGroup name="Collisions" nodeId="46">
+          <Shape shapeId="1" name="BeltCollision" translation="0.479197 0.21681 -0.0508206" static="true" nodeId="47" materialIds="5" nonRenderable="true"/>
+          <Shape shapeId="1" name="BeltCollisionOutput" translation="-5.5208 0.21681 -0.0508206" static="true" nodeId="48" materialIds="5" nonRenderable="true"/>
         </TransformGroup>
-        <TransformGroup name="Visuals" nodeId="48">
-          <Shape shapeId="2" name="ConveyerBeltInput" translation="3 0.105 0.65" clipDistance="250" nodeId="49" materialIds="6" castsShadows="true" receiveShadows="true">
-            <Shape shapeId="3" name="BeltInputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="50" materialIds="7" castsShadows="true" receiveShadows="true">
-              <Shape shapeId="4" name="BeltInputSideRoles" clipDistance="250" nodeId="51" materialIds="8"/>
+        <TransformGroup name="Visuals" nodeId="49">
+          <Shape shapeId="2" name="ConveyerBeltInput" translation="3 0.105 0.65" clipDistance="250" nodeId="50" materialIds="6" castsShadows="true" receiveShadows="true">
+            <Shape shapeId="3" name="BaleInputTrigger" translation="-2.13875 0.950248 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="51" materialIds="5" nonRenderable="true"/>
+            <Shape shapeId="4" name="BeltInputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="52" materialIds="7" castsShadows="true" receiveShadows="true">
+              <Shape shapeId="5" name="BeltInputSideRoles" clipDistance="250" nodeId="53" materialIds="8"/>
             </Shape>
-            <Shape shapeId="5" name="ConveyerBeltInputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="52" materialIds="6" castsShadows="true" receiveShadows="true"/>
-            <Shape shapeId="6" name="InputBeltTrigger" translation="0.25 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="53" materialIds="5" nonRenderable="true"/>
-            <Shape shapeId="7" name="InputBeltTriggerStop" translation="-2.45 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="54" materialIds="5" nonRenderable="true"/>
+            <Shape shapeId="6" name="ConveyerBeltInputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="54" materialIds="6" castsShadows="true" receiveShadows="true"/>
+            <Shape shapeId="7" name="InputBeltTrigger" translation="0.25 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="55" materialIds="5" nonRenderable="true"/>
+            <Shape shapeId="8" name="InputBeltTriggerStop" translation="-2.45 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="56" materialIds="5" nonRenderable="true"/>
           </Shape>
-          <Shape shapeId="2" name="ConveyerBeltOutput" translation="-3 0.105 0.65" clipDistance="250" nodeId="55" materialIds="6" castsShadows="true" receiveShadows="true">
-            <Shape shapeId="3" name="BeltOutputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="56" materialIds="7" castsShadows="true" receiveShadows="true">
-              <Shape shapeId="4" name="BeltOutputSideRoles" clipDistance="250" nodeId="57" materialIds="8"/>
+          <Shape shapeId="2" name="ConveyerBeltOutput" translation="-3 0.105 0.65" clipDistance="250" nodeId="57" materialIds="6" castsShadows="true" receiveShadows="true">
+            <TransformGroup name="BaleOutputNode" translation="2 0.395 -0.65" nodeId="58"/>
+            <Shape shapeId="4" name="BeltOutputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="59" materialIds="7" castsShadows="true" receiveShadows="true">
+              <Shape shapeId="5" name="BeltOutputSideRoles" clipDistance="250" nodeId="60" materialIds="8"/>
             </Shape>
-            <Shape shapeId="5" name="ConveyerBeltOutputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="58" materialIds="6" castsShadows="true" receiveShadows="true"/>
-            <Shape shapeId="8" name="OutputBeltTrigger" translation="0.283652 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="59" materialIds="5" nonRenderable="true"/>
-            <Shape shapeId="7" name="OutputBeltTriggerStop" translation="-2.45 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="60" materialIds="5" nonRenderable="true"/>
+            <Shape shapeId="6" name="ConveyerBeltOutputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="61" materialIds="6" castsShadows="true" receiveShadows="true"/>
+            <Shape shapeId="9" name="OutputBeltTrigger" translation="0.283652 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="62" materialIds="5" nonRenderable="true"/>
+            <Shape shapeId="8" name="OutputBeltTriggerStop" translation="-2.45 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="63" materialIds="5" nonRenderable="true"/>
           </Shape>
-          <Shape shapeId="9" name="Cube" translation="0.00238048 1.0084 -0.00268121" static="true" clipDistance="250" nodeId="61" materialIds="5" castsShadows="true" receiveShadows="true"/>
+          <Shape shapeId="10" name="Cube" translation="0.00238048 1.0084 -0.00268121" static="true" clipDistance="250" nodeId="64" materialIds="5" castsShadows="true" receiveShadows="true"/>
         </TransformGroup>
       </TransformGroup>
   </Scene>
