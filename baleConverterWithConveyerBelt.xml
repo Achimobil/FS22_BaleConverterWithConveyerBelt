@@ -81,5 +81,8 @@
     <i3dMapping id="BeltOutputInnerRoles" node="0>2|1|1"/>
     <i3dMapping id="OutputBeltTrigger" node="0>2|1|3"/>
     <i3dMapping id="OutputBeltTriggerStop" node="0>2|1|4"/>
+    <i3dMapping id="LeftInputInnerRoles" node="0>2|2|1"/>
+    <i3dMapping id="RightInputInnerRoles" node="0>2|2|3"/>
+    <i3dMapping id="UpperInputInnerRoles" node="0>2|2|4"/>
   </i3dMappings>
 </placeable>

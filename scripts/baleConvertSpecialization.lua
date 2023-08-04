@@ -33,7 +33,7 @@ function BaleConvertItem:update(dt)
 		-- print(baleXMLFilename)
 		-- todo: Ausgabe an User wenn Ballen nicht angenommen wird
 		
-		if self.isServer and self.timeSinceLastRun > 1000 then
+		if self.isServer and self.timeSinceLastRun > 500 then
 			self.timeSinceLastRun = 0;
 			
 			local baleObject = Bale.new(self.isServer, self.isClient)
@@ -42,7 +42,7 @@ function BaleConvertItem:update(dt)
 
 			-- platz prüfen ob frei ist hier erforderlich
 			self.outputBlocked = false;
-			overlapBox(x, y, z, rx, ry, rz, 0.3, 0.2, 1, "outputAreaFreeCallback", self, 3212828671, true, false, true)
+			overlapBox(x, y, z, rx, ry, rz, 0.225, 0.175, 0.6, "outputAreaFreeCallback", self, 3212828671, true, false, true)
 			if self.outputBlocked == false and baleObject:loadFromConfigXML(baleXMLFilename, x, y, z, rx, ry, rz) then
 			
 				-- wie viel passt in den 120er ballen?
