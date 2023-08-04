@@ -33,7 +33,7 @@ function BaleConvertItem:update(dt)
 		-- print(baleXMLFilename)
 		-- todo: Ausgabe an User wenn Ballen nicht angenommen wird
 		
-		if self.isServer and self.timeSinceLastRun > 1600 then
+		if self.isServer and self.timeSinceLastRun > 1000 then
 			self.timeSinceLastRun = 0;
 			
 			local baleObject = Bale.new(self.isServer, self.isClient)
