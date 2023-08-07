@@ -4,11 +4,33 @@
 	<version>0.1.0.0</version>
 	
 	<title>
-		<en>Bale Converter</en>
+		<de>Quaderballen HD Umpacker</de>
+		<en>Squarebale HD Wrapper</en>
 	</title>
 	
 	<description>
-		<en><![CDATA[---]]></en>
+		<de><![CDATA[Vorab Testversion. Die Skripte und Modelle dürfen weder in teilen noch komplett nicht in eigenen Mods verwendet werden oder sonst wie veröffentlicht werden.
+Veröffentlichung nur auf meinem GitHub: https://github.com/Achimobil/FS22_BaleConverterWithConveyerBelt
+Später dann auch im ModHub.
+
+Wir haben hier eine Umpacker für Quaderballen. 
+Die Ballen werden auf ein Rollenförderband gelegt und dann dem Umpacker zugeführt.
+Dieser Zerlegt in seinem Inneren die Ballen zu packt diese neu zu HD Ballen zusammen.
+Es können alle Ballen umgepackt werden, die es auch in 120er HD Ballen auf dem Spielstand gibt.
+Sobald das Ausgabeband voll ist stoppt die Maschine bis wieder platz ist.
+
+Rückmeldungen und Fehlermeldungen bitte direkt auf GitHub mit ausführlicher Beschreibung.]]></de>
+		<en><![CDATA[Preliminary test version. The scripts and models may not be used in parts or completely in own mods or published in any other way.
+Publication only on my GitHub: https://github.com/Achimobil/FS22_BaleConverterWithConveyerBelt
+Later also in the ModHub.
+
+We have a repacking machine for square bales. 
+The bales are placed on a roller conveyor and then fed into the repacking machine.
+The wrapper disassembles the bales inside and repacks them into HD bales.
+All bales can be repacked that are also available in 120 HD bales on the stand.
+As soon as the output belt is full, the machine stops until there is enough space again.
+
+Please send feedback and error messages directly to GitHub with a detailed description.]]></en>
 	</description>
 	
 	<multiplayer supported="true"/>

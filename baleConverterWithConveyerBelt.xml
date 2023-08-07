@@ -3,13 +3,22 @@
   <storeData>
     <dailyUpkeep>200</dailyUpkeep>
     <image>store/store_baleConverter.dds</image>
-    <name>Bale Converter</name>
+    <name>
+		<de>Quaderballen HD Umpacker</de>
+		<en>Squarebale HD Wrapper</en>
+	</name>
+	<functions>
+		<function>
+			<de>Packt Quaderballen in handliche 120er HD Ballen um</de>
+			<en>Repacks square bales into handy 120 HD bales</en>
+		</function>
+	</functions>
     <species>placeable</species>
     <category>productionPoints</category>
     <brush>
       <type>placeable</type>
-      <category>production</category>
-      <tab>factories</tab>
+      <category>buildings</category>
+      <tab>tools</tab>
     </brush>
     <brand>LIZARD</brand>
   </storeData>
