@@ -4,15 +4,15 @@
     <dailyUpkeep>200</dailyUpkeep>
     <image>store/store_baleConverter.dds</image>
     <name>
-		<de>Quaderballen HD Umpacker</de>
-		<en>Squarebale HD Wrapper</en>
-	</name>
-	<functions>
-		<function>
-			<de>Packt Quaderballen in handliche 120er HD Ballen um</de>
-			<en>Repacks square bales into handy 120 HD bales</en>
-		</function>
-	</functions>
+      <de>Quaderballen HD Umpacker</de>
+      <en>Squarebale HD Wrapper</en>
+    </name>
+    <functions>
+      <function>
+        <de>Packt Quaderballen in handliche 120er HD Ballen um</de>
+        <en>Repacks square bales into handy 120 HD bales</en>
+      </function>
+    </functions>
     <species>placeable</species>
     <category>productionPoints</category>
     <brush>
@@ -64,11 +64,11 @@
     </baleMove>
   </baleMoves>
   <baleConvert triggerNode="BaleInputTrigger" creationNode="BaleOutputNode">
-      <uvAnimations>
-        <uvAnimation node="LeftInputInnerRoles" to="0.5" parameter="0" speed="-0.03"/>
-        <uvAnimation node="RightInputInnerRoles" to="0.5" parameter="0" speed="0.03"/>
-        <uvAnimation node="UpperInputInnerRoles" to="0.5" parameter="0" speed="0.03"/>
-      </uvAnimations>
+    <uvAnimations>
+      <uvAnimation node="LeftInputInnerRoles" to="0.5" parameter="0" speed="-0.03"/>
+      <uvAnimation node="RightInputInnerRoles" to="0.5" parameter="0" speed="0.03"/>
+      <uvAnimation node="UpperInputInnerRoles" to="0.5" parameter="0" speed="0.03"/>
+    </uvAnimations>
   </baleConvert>
   <i3dMappings>
     <i3dMapping id="clearArea1Start" node="0>0|0|0"/>
