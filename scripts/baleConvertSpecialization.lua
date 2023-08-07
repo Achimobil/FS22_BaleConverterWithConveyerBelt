@@ -11,6 +11,7 @@ function BaleConvertItem.new(isServer, isClient, customMt)
 	
 	self.timeSinceLastRun = 0;
 	self.outputBlocked = false;
+	self.motorSpeed = 10
 
 	return self
 end
@@ -64,7 +65,7 @@ function BaleConvertItem:update(dt)
 				
 -- BaleConvertSpecialization.DebugTable("baleObject", baleObject);
 				
-				if self.baleInTrigger.fillLevel <= 1 then
+				if (self.baleInTrigger.fillLevel - fillLevelForTargetBale) <= 1 then
 					-- nur wenn leer
 					self.baleInTrigger:delete();
 					self.baleInTrigger = nil 
@@ -74,6 +75,17 @@ function BaleConvertItem:update(dt)
 			end
 		end
 		
+		-- Animation läuft solange wie ein ballen im Trigger ist
+		for _, animation in ipairs(self.uvAnimations) do
+			animation.current = (animation.current + dt * self.motorSpeed * 0.001 * animation.to * animation.speed) % animation.to
+			local x, y, z, w = getShaderParameter(animation.node, "offsetUV")
+
+			if animation.parameter == 0 then
+				setShaderParameter(animation.node, "offsetUV", animation.current, y, z, w, false)
+			elseif animation.parameter == 2 then
+				setShaderParameter(animation.node, "offsetUV", x, y, animation.current, w, false)
+			end
+		end
 		
 		-- loop as long as a bale is in the trigger
 		if self.baleInTrigger ~= nil then
@@ -134,6 +146,11 @@ function BaleConvertSpecialization.registerXMLPaths(schema, basePath)
     
     schema:register(XMLValueType.NODE_INDEX, basePath .. ".baleConvert#triggerNode", "Trigger node to detect bales whch should be converted")
     schema:register(XMLValueType.NODE_INDEX, basePath .. ".baleConvert#creationNode", "Node where the 120er bale will be created")
+	
+	schema:register(XMLValueType.NODE_INDEX, basePath .. ".baleConvert.uvAnimations.uvAnimation(?)#node", "")
+	schema:register(XMLValueType.INT, basePath .. ".baleConvert.uvAnimations.uvAnimation(?)#parameter", "")
+	schema:register(XMLValueType.FLOAT, basePath .. ".baleConvert.uvAnimations.uvAnimation(?)#to", "")
+	schema:register(XMLValueType.FLOAT, basePath .. ".baleConvert.uvAnimations.uvAnimation(?)#speed", "")
     
     schema:setXMLSpecializationType()
 end
@@ -153,6 +170,23 @@ function BaleConvertSpecialization:onLoad(savegame)
 	addTrigger(spec.baleConvertItem.triggerNodeId, "inputTriggerCallback", self);
 	
 	spec.baleConvertItem.creationNode = xmlFile:getValue(key .. "#creationNode", nil, self.components, self.i3dMappings);
+		
+	spec.baleConvertItem.uvAnimations = {}
+
+	xmlFile:iterate(key .. ".uvAnimations.uvAnimation", function (_, key)
+		local animNode = xmlFile:getValue(key .. "#node", nil, self.components, self.i3dMappings)
+		local to = xmlFile:getValue(key .. "#to")
+		local parameter = xmlFile:getValue(key .. "#parameter")
+		local speed = xmlFile:getValue(key .. "#speed")
+
+		table.insert(spec.baleConvertItem.uvAnimations, {
+			current = 0,
+			node = animNode,
+			to = to,
+			parameter = parameter,
+			speed = speed
+		})
+	end)
 	
 end
 
