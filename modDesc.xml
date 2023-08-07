@@ -40,6 +40,10 @@ Please send feedback and error messages directly to GitHub with a detailed descr
 		<storeItem xmlFilename="baleConverterWithConveyerBelt.xml"/>
 	</storeItems>
 	
+    <brands>
+        <brand name="FARMERTOOLS" title="Farmer Tools" image="store/brand_FarmerTools.dds"/>
+    </brands>
+	
 	<placeableSpecializations>
 		<specialization name="baleMoveSpecialization" className="BaleMoveSpecialization" filename="scripts/baleMoveSpecialization.lua"/>
 		<specialization name="baleConvertSpecialization" className="BaleConvertSpecialization" filename="scripts/baleConvertSpecialization.lua"/>
