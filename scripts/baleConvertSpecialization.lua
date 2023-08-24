@@ -77,6 +77,7 @@ function BaleConvertItem:update(dt)
 		
 		-- Animation läuft solange wie ein ballen im Trigger ist
 		for _, animation in ipairs(self.uvAnimations) do
+			if self.stop == true then return end;
 			animation.current = (animation.current + dt * self.motorSpeed * 0.001 * animation.to * animation.speed) % animation.to
 			local x, y, z, w = getShaderParameter(animation.node, "offsetUV")
 
@@ -223,7 +224,6 @@ end
 
 function BaleConvertSpecialization:onDelete()
 	local spec =  self.spec_baleConvert;
-    -- for _, baleMoveItem in pairs(spec.baleMoveItems) do
-		removeTrigger(spec.baleConvertItem.triggerNodeId)
-	-- end
+	spec.baleConvertItem.stop = true;
+	removeTrigger(spec.baleConvertItem.triggerNodeId)
 end

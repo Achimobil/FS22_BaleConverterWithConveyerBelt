@@ -31,6 +31,8 @@ function BaleMoveItem:update(dt)
 	if self.isServer then
 		for bale, info in pairs(self.balesOnBelt) do
 			if bale.mountObject == nil and bale.dynamicMountObject == nil then
+				if self.stop == true then return end;
+				
 				if info.jointIndex == 0 then
 					self:addBaleJoint(info)
 				end
@@ -59,6 +61,7 @@ function BaleMoveItem:update(dt)
 	end
 	
 	for _, animation in ipairs(self.uvAnimations) do
+		if self.stop == true then return end;
 		animation.current = (animation.current + dt * self.motorSpeed * 0.001 * animation.to * animation.speed) % animation.to
 		local x, y, z, w = getShaderParameter(animation.node, "offsetUV")
 
@@ -310,7 +313,9 @@ end
 function BaleMoveSpecialization:onDelete()
 	local spec =  self.spec_baleMove;
     for _, baleMoveItem in pairs(spec.baleMoveItems) do
+		baleMoveItem.stop = true;
 		removeTrigger(baleMoveItem.onBeltTriggerId)
+		removeTrigger(baleMoveItem.stopTriggerId)
 	end
 end
 
