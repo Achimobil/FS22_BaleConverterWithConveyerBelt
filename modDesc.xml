@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<modDesc descVersion="76">
+<modDesc descVersion="77">
 	<author>Achimobil</author>
-	<version>0.1.0.1</version>
+	<version>1.0.0.0</version>
 	
 	<title>
 		<de>Quaderballen HD Umpacker</de>
@@ -9,28 +9,33 @@
 	</title>
 	
 	<description>
-		<de><![CDATA[Vorab Testversion. Die Skripte und Modelle dürfen weder in teilen noch komplett nicht in eigenen Mods verwendet werden oder sonst wie veröffentlicht werden.
-Veröffentlichung nur auf meinem GitHub: https://github.com/Achimobil/FS22_BaleConverterWithConveyerBelt
-Später dann auch im ModHub.
-
-Wir haben hier eine Umpacker für Quaderballen. 
+		<de><![CDATA[Wir haben hier eine Umpacker für Quaderballen. 
 Die Ballen werden auf ein Rollenförderband gelegt und dann dem Umpacker zugeführt.
-Dieser Zerlegt in seinem Inneren die Ballen zu packt diese neu zu HD Ballen zusammen.
+Dieser Zerlegt in seinem Inneren die Ballen und packt diese neu zu HD Ballen zusammen.
 Es können alle Ballen umgepackt werden, die es auch in 120er HD Ballen auf dem Spielstand gibt.
 Sobald das Ausgabeband voll ist stoppt die Maschine bis wieder platz ist.
 
-Rückmeldungen und Fehlermeldungen bitte direkt auf GitHub mit ausführlicher Beschreibung.]]></de>
-		<en><![CDATA[Preliminary test version. The scripts and models may not be used in parts or completely in own mods or published in any other way.
-Publication only on my GitHub: https://github.com/Achimobil/FS22_BaleConverterWithConveyerBelt
-Later also in the ModHub.
+Die beiden hier enthaltenen Skipte für die Ballenbewegung und das Ballenkonvertieren darf jeder in seinen eigenen Mods unverändert verwenden und veröffentlichen.
+Das von mir erstellte Förderband darf jeder in seinen Mods nutzen und auch in veränderter Form veröffentlichen.
+Hierzu drüfen auch meine Blender Modelle im GitHub benutzt werden.
+Dies ist gültig ab der ersten Veröffentlichung des Mods im ModHub.
 
-We have a repacking machine for square bales. 
+Rückmeldungen und Fehlermeldungen bitte direkt auf <a href="https://github.com/Achimobil/FS22_BaleConverterWithConveyerBelt">GitHub</a> mit ausführlicher Beschreibung.
+Bei Fehlern im Skript dürfen die von mir veröffentlichten Skript updates ebenfalls in die eigenen Mods übernommen werden.
+]]></de>
+		<en><![CDATA[We have a repacking machine for square bales. 
 The bales are placed on a roller conveyor and then fed into the repacking machine.
 The wrapper disassembles the bales inside and repacks them into HD bales.
 All bales can be repacked that are also available in 120 HD bales on the stand.
 As soon as the output belt is full, the machine stops until there is enough space again.
 
-Please send feedback and error messages directly to GitHub with a detailed description.]]></en>
+The two skips included here for bale movement and bale conversion may be used and published unchanged by anyone in their own mods.
+The conveyor created by me may use everyone in his mods and also publish in modified form.
+You can also use my Blender models in the GitHub.
+This permission is valid from the first publication of the mod in the ModHub, not before.
+
+Feedback and bug reports please directly on <a href="https://github.com/Achimobil/FS22_BaleConverterWithConveyerBelt">GitHub</a> with detailed description.
+In case of errors in the script, the script updates published by me may also be included in your own mods.]]></en>
 	</description>
 	
 	<multiplayer supported="true"/>
