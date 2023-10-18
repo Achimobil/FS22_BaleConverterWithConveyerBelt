@@ -7,8 +7,6 @@
 
   <Files>
     <File fileId="9" filename="$data/shaders/vehicleShader.xml"/>
-    <File fileId="11" filename="$data/shared/detailArray_diffuse.dds"/>
-    <File fileId="10" filename="$data/shared/detailArray_specular.dds"/>
     <File fileId="6" filename="textures/DiamondPlate008D_2K_Color.dds"/>
     <File fileId="7" filename="textures/DiamondPlate008D_2K_NormalGL.dds"/>
     <File fileId="8" filename="textures/DiamondPlate008D_specular.dds"/>
@@ -19,27 +17,22 @@
 
 
   <Materials>
-    <Material name="i3d_default_material" materialId="163" diffuseColor="0.8 0.8 0.8 1" specularColor="0.6 1 0">
+    <Material name="i3d_default_material" materialId="5" diffuseColor="0.8 0.8 0.8 1" specularColor="0.6 1 0">
     </Material>
-    <Material name="mat_outputRubber" materialId="167" diffuseColor="0.0235294 0.0235294 0.0235294 1" specularColor="0.498039 1 0" customShaderId="9" customShaderVariation="colorMask">
-      <Custommap name="mArraySpecular" fileId="10"/>
-      <Custommap name="mArrayDiffuse" fileId="11"/>
-      <CustomParameter name="colorMat0" value="0.0399 0.0399 0.0399 5"/>
+    <Material name="mat_outputRubber" materialId="6" diffuseColor="0.0196078 0.0196078 0.0196078 1" specularColor="0.494118 1 0" customShaderId="9" customShaderVariation="colorMask">
+      <CustomParameter name="colorMat0" value="0.04 0.04 0.04 5"/>
     </Material>
-    <Material name="rail_mat" materialId="164">
+    <Material name="rail_mat" materialId="7">
       <Texture fileId="3"/>
       <Normalmap fileId="4"/>
       <Glossmap fileId="5"/>
     </Material>
-    <Material name="role_front_mat" materialId="165" customShaderId="9" customShaderVariation="uvScroll">
+    <Material name="role_front_mat" materialId="8" customShaderId="9" customShaderVariation="uvScroll">
       <Texture fileId="6"/>
       <Normalmap fileId="7"/>
       <Glossmap fileId="8"/>
-      <Custommap name="mArraySpecular" fileId="10"/>
-      <Custommap name="mArrayNormal" fileId="10"/>
-      <Custommap name="mArrayDiffuse" fileId="11"/>
     </Material>
-    <Material name="role_side_mat" materialId="166" diffuseColor="0.0980392 0.0980392 0.0980392 1" specularColor="0.498039 1 0">
+    <Material name="role_side_mat" materialId="9" diffuseColor="0.0941177 0.0941177 0.0941177 1" specularColor="0.494118 1 0">
     </Material>
   </Materials>
 
@@ -52,71 +45,71 @@
   </Dynamics>
 
   <Scene>
-      <TransformGroup name="BalePackingUnit" nodeId="193">
-        <TransformGroup name="Areas" nodeId="194">
-          <TransformGroup name="clearAreas" nodeId="195">
-            <TransformGroup name="clearArea1Start" translation="6 0 1.5" nodeId="196">
-              <TransformGroup name="clearArea1Height" translation="0 0 -3" nodeId="197"/>
-              <TransformGroup name="clearArea1Width" translation="-12 0 0" nodeId="198"/>
+      <TransformGroup name="BalePackingUnit" clipDistance="250" nodeId="28">
+        <TransformGroup name="Areas" clipDistance="250" nodeId="29">
+          <TransformGroup name="clearAreas" nodeId="30">
+            <TransformGroup name="clearArea1Start" translation="6 0 1.5" nodeId="31">
+              <TransformGroup name="clearArea1Height" translation="0 0 -3" nodeId="32"/>
+              <TransformGroup name="clearArea1Width" translation="-12 0 0" nodeId="33"/>
             </TransformGroup>
           </TransformGroup>
-          <TransformGroup name="indoorAreas" nodeId="199">
-            <TransformGroup name="indoorArea1Start" translation="1 0 -1" nodeId="200">
-              <TransformGroup name="indoorArea1Height" translation="0 0 2" nodeId="201"/>
-              <TransformGroup name="indoorArea1Width" translation="-2 0 0" nodeId="202"/>
+          <TransformGroup name="indoorAreas" nodeId="34">
+            <TransformGroup name="indoorArea1Start" translation="1 0 -1" nodeId="35">
+              <TransformGroup name="indoorArea1Height" translation="0 0 2" nodeId="36"/>
+              <TransformGroup name="indoorArea1Width" translation="-2 0 0" nodeId="37"/>
             </TransformGroup>
           </TransformGroup>
-          <TransformGroup name="levelAreas" nodeId="203">
-            <TransformGroup name="levelArea1Start" translation="6 0 1.5" nodeId="204">
-              <TransformGroup name="levelArea1Height" translation="0 0 -3" nodeId="205"/>
-              <TransformGroup name="levelArea1Width" translation="-12 0 0" nodeId="206"/>
+          <TransformGroup name="levelAreas" nodeId="38">
+            <TransformGroup name="levelArea1Start" translation="6 0 1.5" nodeId="39">
+              <TransformGroup name="levelArea1Height" translation="0 0 -3" nodeId="40"/>
+              <TransformGroup name="levelArea1Width" translation="-12 0 0" nodeId="41"/>
             </TransformGroup>
           </TransformGroup>
-          <TransformGroup name="testAreas" nodeId="207">
-            <TransformGroup name="testArea1Start" translation="6 0 -1.5" nodeId="208">
-              <TransformGroup name="testArea1End" translation="-12 0 3" nodeId="209"/>
+          <TransformGroup name="testAreas" nodeId="42">
+            <TransformGroup name="testArea1Start" translation="6 0 -1.5" nodeId="43">
+              <TransformGroup name="testArea1End" translation="-12 0 3" nodeId="44"/>
             </TransformGroup>
           </TransformGroup>
-          <TransformGroup name="tipOcclusionUpdateAreas" nodeId="210">
-            <TransformGroup name="tipOcclusionUpdateArea1Start" translation="6 0 -1.5" nodeId="211">
-              <TransformGroup name="tipOcclusionUpdateArea1End" translation="-12 0 3" nodeId="212"/>
+          <TransformGroup name="tipOcclusionUpdateAreas" nodeId="45">
+            <TransformGroup name="tipOcclusionUpdateArea1Start" translation="6 0 -1.5" nodeId="46">
+              <TransformGroup name="tipOcclusionUpdateArea1End" translation="-12 0 3" nodeId="47"/>
             </TransformGroup>
           </TransformGroup>
         </TransformGroup>
-        <TransformGroup name="Collisions" nodeId="213">
-          <Shape shapeId="1" name="BeltCollision" translation="0.479197 0.21681 -0.0508206" static="true" nodeId="214" materialIds="163" nonRenderable="true"/>
-          <Shape shapeId="1" name="BeltCollisionOutput" translation="-5.5208 0.21681 -0.0508206" static="true" nodeId="215" materialIds="163" nonRenderable="true"/>
+        <TransformGroup name="Collisions" clipDistance="250" nodeId="48">
+          <Shape shapeId="1" name="BeltCollision" translation="0.479197 0.21681 -0.0508206" static="true" nodeId="49" materialIds="5" nonRenderable="true"/>
+          <Shape shapeId="1" name="BeltCollisionOutput" translation="-5.5208 0.21681 -0.0508206" static="true" nodeId="50" materialIds="5" nonRenderable="true"/>
         </TransformGroup>
-        <TransformGroup name="Visuals" nodeId="216">
-          <Shape shapeId="2" name="ConveyerBeltInput" translation="2.85618 0.105 0.65" clipDistance="250" nodeId="217" materialIds="164" castsShadows="true" receiveShadows="true">
-            <Shape shapeId="3" name="BaleInputTrigger" translation="-2.13875 0.950248 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="218" materialIds="163" nonRenderable="true"/>
-            <Shape shapeId="4" name="BeltInputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="219" materialIds="165" castsShadows="true" receiveShadows="true">
-              <Shape shapeId="5" name="BeltInputSideRoles" clipDistance="250" nodeId="220" materialIds="166"/>
+        <TransformGroup name="Visuals" clipDistance="250" nodeId="51">
+          <Shape shapeId="2" name="ConveyerBeltInput" translation="2.85618 0.105 0.65" clipDistance="250" nodeId="52" materialIds="7" castsShadows="true" receiveShadows="true">
+            <Shape shapeId="3" name="BaleInputTrigger" translation="-2.13875 0.950248 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="53" materialIds="5" nonRenderable="true"/>
+            <Shape shapeId="4" name="BeltInputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="54" materialIds="8" castsShadows="true" receiveShadows="true">
+              <Shape shapeId="5" name="BeltInputSideRoles" clipDistance="250" nodeId="55" materialIds="9"/>
             </Shape>
-            <Shape shapeId="6" name="ConveyerBeltInputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="221" materialIds="164" castsShadows="true" receiveShadows="true"/>
-            <Shape shapeId="7" name="InputBeltTrigger" translation="0.25 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="222" materialIds="163" nonRenderable="true"/>
-            <Shape shapeId="8" name="InputBeltTriggerStop" translation="-2.45 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="223" materialIds="163" nonRenderable="true"/>
+            <Shape shapeId="6" name="ConveyerBeltInputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="56" materialIds="7" castsShadows="true" receiveShadows="true"/>
+            <Shape shapeId="7" name="InputBeltTrigger" translation="0.25 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="57" materialIds="5" nonRenderable="true"/>
+            <Shape shapeId="8" name="InputBeltTriggerStop" translation="-2.45 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="58" materialIds="5" nonRenderable="true"/>
           </Shape>
-          <Shape shapeId="2" name="ConveyerBeltOutput" translation="-2.8 0.105 0.65" clipDistance="250" nodeId="224" materialIds="164" castsShadows="true" receiveShadows="true">
-            <TransformGroup name="BaleOutputNode" translation="2 0.395 -0.65" nodeId="225"/>
-            <Shape shapeId="4" name="BeltOutputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="226" materialIds="165" castsShadows="true" receiveShadows="true">
-              <Shape shapeId="5" name="BeltOutputSideRoles" clipDistance="250" nodeId="227" materialIds="166"/>
+          <Shape shapeId="2" name="ConveyerBeltOutput" translation="-2.8 0.105 0.65" clipDistance="250" nodeId="59" materialIds="7" castsShadows="true" receiveShadows="true">
+            <TransformGroup name="BaleOutputNode" translation="2 0.395 -0.65" nodeId="60"/>
+            <Shape shapeId="4" name="BeltOutputInnerRoles" translation="-2.33399 0.0899999 -0.65" rotation="90 -0 0" clipDistance="250" nodeId="61" materialIds="8" castsShadows="true" receiveShadows="true">
+              <Shape shapeId="5" name="BeltOutputSideRoles" clipDistance="250" nodeId="62" materialIds="9"/>
             </Shape>
-            <Shape shapeId="6" name="ConveyerBeltOutputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="228" materialIds="164" castsShadows="true" receiveShadows="true"/>
-            <Shape shapeId="9" name="OutputBeltTrigger" translation="0.283652 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="229" materialIds="163" nonRenderable="true"/>
-            <Shape shapeId="10" name="OutputBeltTriggerStop" translation="-2.45 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="230" materialIds="163" nonRenderable="true"/>
+            <Shape shapeId="6" name="ConveyerBeltOutputLeft" translation="0 -7.45058e-09 -1.3" clipDistance="250" nodeId="63" materialIds="7" castsShadows="true" receiveShadows="true"/>
+            <Shape shapeId="9" name="OutputBeltTrigger" translation="0.283652 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="64" materialIds="5" nonRenderable="true"/>
+            <Shape shapeId="10" name="OutputBeltTriggerStop" translation="-2.45 0.21 -0.65" static="true" trigger="true" collisionMask="16781312" clipDistance="250" nodeId="65" materialIds="5" nonRenderable="true"/>
           </Shape>
-          <Shape shapeId="11" name="MainCase" translation="0.00238048 1.0084 -0.00268121" static="true" clipDistance="250" nodeId="231" materialIds="164" castsShadows="true" receiveShadows="true">
-            <Shape shapeId="12" name="InputRubber" translation="0.439515 0.346994 6.51926e-09" nodeId="232" materialIds="167"/>
-            <Shape shapeId="13" name="LeftInputInnerRoles" translation="0.91762 0.191602 0.802681" static="true" clipDistance="250" nodeId="233" materialIds="165" castsShadows="true" receiveShadows="true">
-              <Shape shapeId="14" name="LeftInputSideRoles.001" clipDistance="250" nodeId="234" materialIds="166"/>
+          <Shape shapeId="11" name="MainCase" translation="0.00238048 1.0084 -0.00268121" static="true" clipDistance="250" nodeId="66" materialIds="7" castsShadows="true" receiveShadows="true">
+            <Shape shapeId="12" name="InputRubber" translation="0.439515 0.346994 6.51926e-09" nodeId="67" materialIds="6"/>
+            <Shape shapeId="13" name="LeftInputInnerRoles" translation="0.91762 0.191602 0.802681" static="true" clipDistance="250" nodeId="68" materialIds="8" castsShadows="true" receiveShadows="true">
+              <Shape shapeId="14" name="LeftInputSideRoles.001" clipDistance="250" nodeId="69" materialIds="9"/>
             </Shape>
-            <Shape shapeId="15" name="OutputRubber" translation="-0.946163 0.346994 6.51926e-09" nodeId="235" materialIds="167"/>
-            <Shape shapeId="13" name="RightInputInnerRoles" translation="0.91762 0.191602 -0.797319" static="true" clipDistance="250" nodeId="236" materialIds="165" castsShadows="true" receiveShadows="true">
-              <Shape shapeId="14" name="RightInputSideRoles" clipDistance="250" nodeId="237" materialIds="166"/>
+            <Shape shapeId="15" name="OutputRubber" translation="-0.946163 0.346994 6.51926e-09" clipDistance="250" nodeId="70" materialIds="6"/>
+            <Shape shapeId="13" name="RightInputInnerRoles" translation="0.91762 0.191602 -0.797319" static="true" clipDistance="250" nodeId="71" materialIds="8" castsShadows="true" receiveShadows="true">
+              <Shape shapeId="14" name="RightInputSideRoles" clipDistance="250" nodeId="72" materialIds="9"/>
             </Shape>
-            <Shape shapeId="16" name="UpperInputInnerRoles" translation="0.441867 0.950224 0.00268121" rotation="90 -0 0" static="true" clipDistance="250" nodeId="238" materialIds="165" castsShadows="true" receiveShadows="true">
-              <Shape shapeId="17" name="UpperInputSideRoles" clipDistance="250" nodeId="239" materialIds="166"/>
+            <Shape shapeId="16" name="UpperInputInnerRoles" translation="0.441867 0.950224 0.00268121" rotation="90 -0 0" static="true" clipDistance="250" nodeId="73" materialIds="8" castsShadows="true" receiveShadows="true">
+              <Shape shapeId="17" name="UpperInputSideRoles" clipDistance="250" nodeId="74" materialIds="9"/>
             </Shape>
           </Shape>
         </TransformGroup>
