@@ -226,7 +226,7 @@ function BaleConvertSpecialization:inputTriggerCallback(triggerId, otherId, onEn
 end
 
 function BaleConvertSpecialization:onFinalizePlacement()
-print("BaleConvertSpecialization:onFinalizePlacement()")
+-- print("BaleConvertSpecialization:onFinalizePlacement()")
 	local spec =  self.spec_baleConvert;
     -- for _, baleMoveItem in pairs(spec.baleMoveItems) do
 		spec.baleConvertItem:register(true)

@@ -21,11 +21,13 @@ function BaleMoveItem.new(isServer, isClient, customMt)
 	local self = Object.new(isServer, isClient, customMt or BaleMoveItem_mt)
 	self.onBeltTriggerId = nil
 	self.balesOnBelt = {}
+	self.balesOnBeltCount = 0
 	self.jointToInfo = {}
-	self.speed = 3
+	self.speed = 0.2
 	self.motorSpeed = -10
 	self.baleInStopTrigger = {}
 	self.baleInStopTriggerCount = 0
+	self.soundIsOn = false;
 
 	return self
 end
@@ -36,6 +38,7 @@ function BaleMoveItem:update(dt)
 	
 	-- wenn stop trigger was erfasst hat, nichts weiteres hier machen
 	if self.baleInStopTriggerCount ~= 0 then
+		self:PlaySound(false);
 		return;
 	end
 	
@@ -71,7 +74,7 @@ function BaleMoveItem:update(dt)
 			end
 		end
 	end
-	
+		
 	for _, animation in ipairs(self.uvAnimations) do
 		if self.stop == true then return end;
 		animation.current = (animation.current + dt * self.motorSpeed * 0.001 * animation.to * animation.speed) % animation.to
@@ -82,6 +85,31 @@ function BaleMoveItem:update(dt)
 		elseif animation.parameter == 2 then
 			setShaderParameter(animation.node, "offsetUV", x, y, animation.current, w, false)
 		end
+	end
+	
+	if self.balesOnBeltCount > 0 then 
+		self:PlaySound(true);
+		self:raiseActive();
+	else
+		self:PlaySound(false);
+	end
+end
+
+function BaleMoveItem:PlaySound(animationRunning)
+	-- print(string.format("BaleMoveItem:PlaySound count:%s shouldRun:%s IsRuning:%s", self.balesOnBeltCount, animationRunning, self.soundIsOn))
+
+	-- sound hier einstellen, damit das unten weiterhin einfach ein return machen kann, wenn der rest weg fällt
+	if animationRunning and not self.soundIsOn then
+		-- war aus und läuft gerade an
+		self.soundIsOn = true;
+		g_soundManager:stopSamples(self.samples)
+		g_soundManager:playSample(self.samples.start)
+		g_soundManager:playSample(self.samples.work, 0, self.samples.start)
+	elseif not animationRunning and self.soundIsOn then
+		-- ist an, aber jetzt geht er aus
+		self.soundIsOn = false;
+		g_soundManager:stopSamples(self.samples)
+		g_soundManager:playSample(self.samples.stop)
 	end
 end
 
@@ -95,8 +123,6 @@ function BaleMoveItem:addBaleJoint(baleInfo)
 		local x, y, z = localToWorld(bale.nodeId, getCenterOfMass(bale.nodeId))
 
 		setWorldTranslation(jointNode, x, y, z)
-		setCollisionMask(bale.nodeId, 18)
-
 		local constr = JointConstructor.new()
 
 		constr:setActors(self.beltAnchorNode, bale.nodeId)
@@ -107,7 +133,7 @@ function BaleMoveItem:addBaleJoint(baleInfo)
 
 		constr:setRotationLimit(1, -angleY, angleY)
 
-		local forceLimit = 250 * getMass(bale.nodeId)
+		local forceLimit = 50 * getMass(bale.nodeId)
 
 		constr:setBreakable(forceLimit, forceLimit)
 		constr:setEnableCollision(true)
@@ -137,10 +163,6 @@ function BaleMoveItem:removeBaleJoint(baleInfo)
 		baleInfo.jointIndex = 0
 		baleInfo.jointNode = nil
 		baleInfo.bale.isOnBelt = false
-
-		if baleInfo.bale.nodeId ~= 0 then
-			setCollisionMask(baleInfo.bale.nodeId, 16781314)
-		end
 	end
 end
 
@@ -197,6 +219,10 @@ function BaleMoveSpecialization.registerXMLPaths(schema, basePath)
 	schema:register(XMLValueType.FLOAT, basePath .. ".baleMoves.baleMove(?).uvAnimations.uvAnimation(?)#to", "")
 	schema:register(XMLValueType.FLOAT, basePath .. ".baleMoves.baleMove(?).uvAnimations.uvAnimation(?)#speed", "")
     
+	SoundManager.registerSampleXMLPaths(schema, basePath .. ".baleMoves.sounds", "start")
+	SoundManager.registerSampleXMLPaths(schema, basePath .. ".baleMoves.sounds", "work")
+	SoundManager.registerSampleXMLPaths(schema, basePath .. ".baleMoves.sounds", "stop")
+	
     schema:setXMLSpecializationType()
 end
 
@@ -238,6 +264,12 @@ function BaleMoveSpecialization:onLoad(savegame)
 				speed = speed
 			})
 		end)
+		
+		baleMoveItem.samples = {
+			start = g_soundManager:loadSampleFromXML(xmlFile, key .. ".sounds", "start", self.modDirectory, self.components, 1, AudioGroup.ENVIRONMENT, self.i3dMappings, self),
+			stop = g_soundManager:loadSampleFromXML(xmlFile, key .. ".sounds", "stop", self.modDirectory, self.components, 1, AudioGroup.ENVIRONMENT, self.i3dMappings, self),
+			work = g_soundManager:loadSampleFromXML(xmlFile, key .. ".sounds", "work", self.modDirectory, self.components, 0, AudioGroup.ENVIRONMENT, self.i3dMappings, self)
+		}
 
 		spec.baleMoveItems[baleMoveItem.onBeltTriggerId] = baleMoveItem;
 		spec.stopTriggerToBeltTrigger[baleMoveItem.stopTriggerId] = baleMoveItem.onBeltTriggerId
@@ -245,6 +277,7 @@ function BaleMoveSpecialization:onLoad(savegame)
 end
 
 function BaleMoveSpecialization:onBeltTriggerCallback(triggerId, otherId, onEnter, onLeave, onStay)
+print(string.format("BaleMoveSpecialization:onBeltTriggerCallback(%s, %s, %s, %s, %s)", triggerId, otherId, onEnter, onLeave, onStay))
     local spec =  self.spec_baleMove;
 	local currentBaleMoveItem = spec.baleMoveItems[triggerId];
 	-- print("onBeltTriggerCallback")
@@ -261,6 +294,7 @@ function BaleMoveSpecialization:onBeltTriggerCallback(triggerId, otherId, onEnte
 					xDirection = 0
 				}
 				currentBaleMoveItem.balesOnBelt[bale] = info
+				currentBaleMoveItem.balesOnBeltCount = currentBaleMoveItem.balesOnBeltCount + 1;
 				if bale.addDeleteListener ~= nil then
 					bale:addDeleteListener(self, "onDeleteBale")
 				end
@@ -273,6 +307,7 @@ function BaleMoveSpecialization:onBeltTriggerCallback(triggerId, otherId, onEnte
 				currentBaleMoveItem:removeBaleJoint(info)
 
 				currentBaleMoveItem.balesOnBelt[bale] = nil
+				currentBaleMoveItem.balesOnBeltCount = currentBaleMoveItem.balesOnBeltCount - 1;
 				if bale.removeDeleteListener ~= nil then
 					bale:removeDeleteListener(self, "onDeleteBale")
 				end
@@ -337,6 +372,8 @@ function BaleMoveSpecialization:onDeleteBale(object)
     for _, baleMoveItem in pairs(spec.baleMoveItems) do
 		if baleMoveItem.balesOnBelt[object] ~= nil then
 			baleMoveItem.balesOnBelt[object] = nil
+			baleMoveItem.balesOnBeltCount = baleMoveItem.balesOnBeltCount - 1;
+			baleMoveItem:raiseActive();
 		end
 	end
 end

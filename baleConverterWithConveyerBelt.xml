@@ -56,11 +56,33 @@
       <uvAnimations>
         <uvAnimation node="BeltInputInnerRoles" to="0.5" parameter="0" speed="0.05"/>
       </uvAnimations>
+      <sounds>
+        <start file="$data/sounds/tools/rollbelt/rollbelt_start.wav" linkNode="BeltInputInnerRoles" innerRadius="0.1" outerRadius="20.0">
+          <volume indoor="0.0" outdoor="0.55"/>
+        </start>
+        <work file="$data/sounds/tools/rollbelt/rollbelt_loop.wav" linkNode="BeltInputInnerRoles" innerRadius="0.1" outerRadius="20.0">
+          <volume indoor="0.0" outdoor="0.55"/>
+        </work>
+        <stop file="$data/sounds/tools/rollbelt/rollbelt_stop.wav" linkNode="BeltInputInnerRoles" innerRadius="0.1" outerRadius="20.0">
+          <volume indoor="0.0" outdoor="0.55"/>
+        </stop>
+      </sounds>
     </baleMove>
     <baleMove onBeltTrigger="OutputBeltTrigger" jointBaseNode="BeltCollision" anchorNode="BeltCollisionOutput" stopTrigger="OutputBeltTriggerStop">
       <uvAnimations>
         <uvAnimation node="BeltOutputInnerRoles" to="0.5" parameter="0" speed="0.05"/>
       </uvAnimations>
+      <sounds>
+        <start file="$data/sounds/tools/rollbelt/rollbelt_start.wav" linkNode="BeltOutputInnerRoles" innerRadius="0.1" outerRadius="20.0">
+          <volume indoor="0.0" outdoor="0.55"/>
+        </start>
+        <work file="$data/sounds/tools/rollbelt/rollbelt_loop.wav" linkNode="BeltOutputInnerRoles" innerRadius="0.1" outerRadius="20.0">
+          <volume indoor="0.0" outdoor="0.55"/>
+        </work>
+        <stop file="$data/sounds/tools/rollbelt/rollbelt_stop.wav" linkNode="BeltOutputInnerRoles" innerRadius="0.1" outerRadius="20.0">
+          <volume indoor="0.0" outdoor="0.55"/>
+        </stop>
+      </sounds>
     </baleMove>
   </baleMoves>
   <baleConvert triggerNode="BaleInputTrigger" creationNode="BaleOutputNode">
