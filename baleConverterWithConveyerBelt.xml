@@ -68,7 +68,7 @@
         </stop>
       </sounds>
     </baleMove>
-    <baleMove onBeltTrigger="OutputBeltTrigger" jointBaseNode="BeltCollision" anchorNode="BeltCollisionOutput" stopTrigger="OutputBeltTriggerStop">
+    <baleMove onBeltTrigger="OutputBeltTrigger" jointBaseNode="BeltCollisionOutput" anchorNode="BeltCollisionOutput" stopTrigger="OutputBeltTriggerStop">
       <uvAnimations>
         <uvAnimation node="BeltOutputInnerRoles" to="0.5" parameter="0" speed="0.05"/>
       </uvAnimations>
@@ -91,6 +91,17 @@
       <uvAnimation node="RightInputInnerRoles" to="0.5" parameter="0" speed="0.03"/>
       <uvAnimation node="UpperInputInnerRoles" to="0.5" parameter="0" speed="0.03"/>
     </uvAnimations>
+      <sounds>
+        <start file="$data/sounds/tools/harvest/combineHarvesterStart.wav" linkNode="UpperInputInnerRoles" innerRadius="0.1" outerRadius="20.0">
+          <volume indoor="0.0" outdoor="0.80"/>
+        </start>
+        <work file="$data/sounds/tools/harvest/combineHarvesterLoop.wav" linkNode="UpperInputInnerRoles" innerRadius="0.1" outerRadius="20.0">
+          <volume indoor="0.0" outdoor="0.80"/>
+        </work>
+        <stop file="$data/sounds/tools/harvest/combineHarvesterStop.wav" linkNode="UpperInputInnerRoles" innerRadius="0.1" outerRadius="20.0">
+          <volume indoor="0.0" outdoor="0.80"/>
+        </stop>
+      </sounds>
   </baleConvert>
   <i3dMappings>
     <i3dMapping id="clearArea1Start" node="0>0|0|0"/>

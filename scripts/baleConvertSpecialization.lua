@@ -23,7 +23,8 @@ function BaleConvertItem.new(isServer, isClient, customMt)
 	
 	self.timeSinceLastRun = 0;
 	self.outputBlocked = false;
-	self.motorSpeed = 10
+	self.motorSpeed = 10;
+	self.soundIsOn = false;
 
 	return self
 end
@@ -75,7 +76,7 @@ function BaleConvertItem:update(dt)
 				baleObject:register()
 				
 				
--- BaleConvertSpecialization.DebugTable("baleObject", baleObject);
+				-- BaleConvertSpecialization.DebugTable("baleObject", baleObject);
 				
 				if (self.baleInTrigger.fillLevel - fillLevelForTargetBale) <= 1 then
 					-- nur wenn leer
@@ -102,7 +103,10 @@ function BaleConvertItem:update(dt)
 		
 		-- loop as long as a bale is in the trigger
 		if self.baleInTrigger ~= nil then
+			self:PlaySound(true);
 			self:raiseActive();
+		else
+			self:PlaySound(false);
 		end
 		-- BaleConvertSpecialization.DebugTable("self", self);
 	end
@@ -121,7 +125,23 @@ function BaleConvertItem:outputAreaFreeCallback(transformId)
 	return true
 end
 
+function BaleConvertItem:PlaySound(animationRunning)
+	print(string.format("BaleConvertItem:PlaySound baleInTrigger:%s shouldRun:%s IsRuning:%s", self.baleInTrigger ~= nil, animationRunning, self.soundIsOn))
 
+	-- sound hier einstellen, damit das unten weiterhin einfach ein return machen kann, wenn der rest weg fällt
+	if animationRunning and not self.soundIsOn then
+		-- war aus und läuft gerade an
+		self.soundIsOn = true;
+		g_soundManager:stopSamples(self.samples)
+		g_soundManager:playSample(self.samples.start)
+		g_soundManager:playSample(self.samples.work, 0, self.samples.start)
+	elseif not animationRunning and self.soundIsOn then
+		-- ist an, aber jetzt geht er aus
+		self.soundIsOn = false;
+		g_soundManager:stopSamples(self.samples)
+		g_soundManager:playSample(self.samples.stop)
+	end
+end
 
 
 
@@ -165,6 +185,10 @@ function BaleConvertSpecialization.registerXMLPaths(schema, basePath)
 	schema:register(XMLValueType.FLOAT, basePath .. ".baleConvert.uvAnimations.uvAnimation(?)#to", "")
 	schema:register(XMLValueType.FLOAT, basePath .. ".baleConvert.uvAnimations.uvAnimation(?)#speed", "")
     
+	SoundManager.registerSampleXMLPaths(schema, basePath .. ".baleConvert.sounds", "start")
+	SoundManager.registerSampleXMLPaths(schema, basePath .. ".baleConvert.sounds", "work")
+	SoundManager.registerSampleXMLPaths(schema, basePath .. ".baleConvert.sounds", "stop")
+    
     schema:setXMLSpecializationType()
 end
 
@@ -200,6 +224,12 @@ function BaleConvertSpecialization:onLoad(savegame)
 			speed = speed
 		})
 	end)
+		
+	spec.baleConvertItem.samples = {
+		start = g_soundManager:loadSampleFromXML(xmlFile, key .. ".sounds", "start", self.modDirectory, self.components, 1, AudioGroup.ENVIRONMENT, self.i3dMappings, self),
+		stop = g_soundManager:loadSampleFromXML(xmlFile, key .. ".sounds", "stop", self.modDirectory, self.components, 1, AudioGroup.ENVIRONMENT, self.i3dMappings, self),
+		work = g_soundManager:loadSampleFromXML(xmlFile, key .. ".sounds", "work", self.modDirectory, self.components, 0, AudioGroup.ENVIRONMENT, self.i3dMappings, self)
+	}
 	
 end
 
