@@ -17,22 +17,25 @@ BaleConvertItem = {}
 local BaleConvertItem_mt = Class(BaleConvertItem, Object)
 
 
-function BaleConvertItem.new(isServer, isClient, customMt)
-	-- print(string.format("BaleConvertItem.new(%s,%s,%s)", isServer, isClient, customMt))
-	local self = Object.new(isServer, isClient, customMt or BaleConvertItem_mt)
-	
+function BaleConvertItem.new(isServer, isClient, customMt, parent)
+	-- print(string.format("BaleConvertItem.new(%s,%s,%s,%s)", isServer, isClient, customMt, parent))
+	local self = setmetatable({}, customMt or BaleConvertItem_mt)
+	self.isServer = isServer;
+	self.isClient = isClient;
+	self.parent = parent;
+
 	self.timeSinceLastRun = 0;
 	self.outputBlocked = false;
 	self.motorSpeed = 10;
 	self.soundIsOn = false;
+	self.isTurnedOn = false;
 
 	return self
 end
 
-
 function BaleConvertItem:update(dt)
 	BaleConvertItem:superClass().update(self, dt)
-	-- print("BaleConvertItem:update("..dt..")")
+	-- print(string.format("BaleConvertItem.update(%s) - isServer:%s isClient: %s", dt, self.isServer, self.isClient))
 	
 	-- verzögerung
 	self.timeSinceLastRun = self.timeSinceLastRun + dt;
@@ -43,72 +46,89 @@ function BaleConvertItem:update(dt)
 		
 		-- einen Ballen erstellen
 		local baleXMLFilename = g_baleManager:getBaleXMLFilename(fillTypeId, false, nil, nil, 1.2, nil, customEnvironment)
-		-- print("baleXMLFilename")
-		-- print(baleXMLFilename)
-		-- todo: Ausgabe an User wenn Ballen nicht angenommen wird
 		
-		if self.isServer and self.timeSinceLastRun > 500 then
-			self.timeSinceLastRun = 0;
-			
-			local baleObject = Bale.new(self.isServer, self.isClient)
-			local x, y, z = getWorldTranslation(self.creationNode)
-			local rx, ry, rz = getWorldRotation(self.creationNode)
+		if self.isServer then 
+			if self.timeSinceLastRun > 500 then
+				self.timeSinceLastRun = 0;
+				
+				local baleObject = Bale.new(self.isServer, self.isClient)
+				local x, y, z = getWorldTranslation(self.creationNode)
+				local rx, ry, rz = getWorldRotation(self.creationNode)
 
-			-- platz prüfen ob frei ist hier erforderlich
-			self.outputBlocked = false;
-			overlapBox(x, y, z, rx, ry, rz, 0.225, 0.175, 0.6, "outputAreaFreeCallback", self, 3212828671, true, false, true)
-			if self.outputBlocked == false and baleObject:loadFromConfigXML(baleXMLFilename, x, y, z, rx, ry, rz) then
-			
-				-- wie viel passt in den 120er ballen?
-				local maxInTargetBale
-				for _, baleFillType in pairs(baleObject.fillTypes) do
-					if baleFillType.fillTypeIndex == fillTypeId then
-						maxInTargetBale = baleFillType.capacity;
+				-- platz prüfen ob frei ist hier erforderlich
+				self.outputBlocked = false;
+				overlapBox(x, y, z, rx, ry, rz, 0.225, 0.175, 0.6, "outputAreaFreeCallback", self, 3212828671, true, false, true)
+				if self.outputBlocked == false and baleObject:loadFromConfigXML(baleXMLFilename, x, y, z, rx, ry, rz) then
+				
+					-- wie viel passt in den 120er ballen?
+					local maxInTargetBale
+					for _, baleFillType in pairs(baleObject.fillTypes) do
+						if baleFillType.fillTypeIndex == fillTypeId then
+							maxInTargetBale = baleFillType.capacity;
+						end
+					end
+					
+					local availableFillLevel = self.baleInTrigger.fillLevel;
+					local fillLevelForTargetBale = math.min(availableFillLevel, maxInTargetBale);
+				
+					baleObject:setFillType(fillTypeId)
+					baleObject:setFillLevel(fillLevelForTargetBale)
+					baleObject:setOwnerFarmId(self.baleInTrigger.ownerFarmId, true)
+					baleObject:register()
+					
+					
+					-- BaleConvertSpecialization.DebugTable("baleObject", baleObject);
+					
+					if (self.baleInTrigger.fillLevel - fillLevelForTargetBale) <= 1 then
+						-- nur wenn leer
+						self.baleInTrigger:delete();
+						self.baleInTrigger = nil 
+					else
+						self.baleInTrigger:setFillLevel(self.baleInTrigger.fillLevel - fillLevelForTargetBale)
 					end
 				end
-				
-				local availableFillLevel = self.baleInTrigger.fillLevel;
-				local fillLevelForTargetBale = math.min(availableFillLevel, maxInTargetBale);
-			
-				baleObject:setFillType(fillTypeId)
-				baleObject:setFillLevel(fillLevelForTargetBale)
-				baleObject:setOwnerFarmId(self.baleInTrigger.ownerFarmId, true)
-				baleObject:register()
-				
-				
-				-- BaleConvertSpecialization.DebugTable("baleObject", baleObject);
-				
-				if (self.baleInTrigger.fillLevel - fillLevelForTargetBale) <= 1 then
-					-- nur wenn leer
-					self.baleInTrigger:delete();
-					self.baleInTrigger = nil 
-				else
-					self.baleInTrigger:setFillLevel(self.baleInTrigger.fillLevel - fillLevelForTargetBale)
+			end
+		end
+		
+		if self.isClient then 
+			-- animation und sound nur auf client
+			-- Animation läuft solange wie ein ballen im Trigger ist
+			for _, animation in ipairs(self.uvAnimations) do
+				if self.stop == true then return end;
+				animation.current = (animation.current + dt * self.motorSpeed * 0.001 * animation.to * animation.speed) % animation.to
+				local x, y, z, w = getShaderParameter(animation.node, "offsetUV")
+
+				if animation.parameter == 0 then
+					setShaderParameter(animation.node, "offsetUV", animation.current, y, z, w, false)
+				elseif animation.parameter == 2 then
+					setShaderParameter(animation.node, "offsetUV", x, y, animation.current, w, false)
 				end
 			end
-		end
-		
-		-- Animation läuft solange wie ein ballen im Trigger ist
-		for _, animation in ipairs(self.uvAnimations) do
-			if self.stop == true then return end;
-			animation.current = (animation.current + dt * self.motorSpeed * 0.001 * animation.to * animation.speed) % animation.to
-			local x, y, z, w = getShaderParameter(animation.node, "offsetUV")
-
-			if animation.parameter == 0 then
-				setShaderParameter(animation.node, "offsetUV", animation.current, y, z, w, false)
-			elseif animation.parameter == 2 then
-				setShaderParameter(animation.node, "offsetUV", x, y, animation.current, w, false)
+			
+			-- loop as long as a bale is in the trigger
+			if self.baleInTrigger ~= nil then
+				self:PlaySound(true);
+				self.parent:raiseActive();
+			else
+				self:PlaySound(false);
 			end
 		end
-		
-		-- loop as long as a bale is in the trigger
-		if self.baleInTrigger ~= nil then
-			self:PlaySound(true);
-			self:raiseActive();
-		else
+	else
+		if self.isClient then 
+			-- auf client sound stoppen
 			self:PlaySound(false);
 		end
-		-- BaleConvertSpecialization.DebugTable("self", self);
+	end
+end
+
+function BaleConvertItem:SetTurnOn(isTurnedOn, noEventSend)
+	-- print(string.format("BaleConvertItem.SetTurnOn(%s, %s)", isTurnedOn, noEventSend))
+	local spec = self.spec_baleConvert;
+	
+	
+	if self.isTurnedOn ~= isTurnedOn then
+		-- bei status änderung aktivieren, rest macht dann die update
+		self:raiseActive()
 	end
 end
 
@@ -125,25 +145,28 @@ function BaleConvertItem:outputAreaFreeCallback(transformId)
 	return true
 end
 
-function BaleConvertItem:PlaySound(animationRunning)
-	print(string.format("BaleConvertItem:PlaySound baleInTrigger:%s shouldRun:%s IsRuning:%s", self.baleInTrigger ~= nil, animationRunning, self.soundIsOn))
 
-	-- sound hier einstellen, damit das unten weiterhin einfach ein return machen kann, wenn der rest weg fällt
-	if animationRunning and not self.soundIsOn then
-		-- war aus und läuft gerade an
-		self.soundIsOn = true;
-		g_soundManager:stopSamples(self.samples)
-		g_soundManager:playSample(self.samples.start)
-		g_soundManager:playSample(self.samples.work, 0, self.samples.start)
-	elseif not animationRunning and self.soundIsOn then
-		-- ist an, aber jetzt geht er aus
-		self.soundIsOn = false;
-		g_soundManager:stopSamples(self.samples)
-		g_soundManager:playSample(self.samples.stop)
+function BaleConvertItem:PlaySound(animationRunning)
+	-- print(string.format("BaleConvertItem:PlaySound baleInTrigger:%s shouldRun:%s IsRuning:%s", self.baleInTrigger ~= nil, animationRunning, self.soundIsOn))
+	self.isTurnedOn = animationRunning;
+	if self.isClient then 
+		-- sound hier einstellen, damit das unten weiterhin einfach ein return machen kann, wenn der rest weg fällt
+		if animationRunning and not self.soundIsOn then
+			-- war aus und läuft gerade an
+			-- print("BaleConvertItem PlaySound on")
+			self.soundIsOn = true;
+			g_soundManager:stopSamples(self.samples)
+			g_soundManager:playSample(self.samples.start)
+			g_soundManager:playSample(self.samples.work, 0, self.samples.start)
+		elseif not animationRunning and self.soundIsOn then
+			-- ist an, aber jetzt geht er aus
+			-- print("BaleConvertItem PlaySound off")
+			self.soundIsOn = false;
+			g_soundManager:stopSamples(self.samples)
+			g_soundManager:playSample(self.samples.stop)
+		end
 	end
 end
-
-
 
 
 BaleConvertSpecialization = {
@@ -160,18 +183,17 @@ function BaleConvertSpecialization.DebugTable(text, myTable)
 	DebugUtil.printTableRecursively(myTable,"_",0,2)
 end
 
-function BaleConvertSpecialization.registerOverwrittenFunctions(placeableType)
-	-- SpecializationUtil.registerOverwrittenFunction(placeableType, "update", BaleConvertSpecialization.update)
-end
-
 function BaleConvertSpecialization.registerFunctions(placeableType)
 	SpecializationUtil.registerFunction(placeableType, "inputTriggerCallback", BaleConvertSpecialization.inputTriggerCallback)
 end
 
 function BaleConvertSpecialization.registerEventListeners(placeableType)
+	-- print("BaleConvertSpecialization:registerEventListeners(placeableType)")
     SpecializationUtil.registerEventListener(placeableType, "onLoad", BaleConvertSpecialization)
 	SpecializationUtil.registerEventListener(placeableType, "onDelete", BaleConvertSpecialization)
-	SpecializationUtil.registerEventListener(placeableType, "onFinalizePlacement", BaleConvertSpecialization)
+	SpecializationUtil.registerEventListener(placeableType, "onUpdate", BaleConvertSpecialization)
+	SpecializationUtil.registerEventListener(placeableType, "onReadStream", BaleConvertSpecialization)
+	SpecializationUtil.registerEventListener(placeableType, "onWriteStream", BaleConvertSpecialization)
 end
 
 function BaleConvertSpecialization.registerXMLPaths(schema, basePath)
@@ -193,13 +215,14 @@ function BaleConvertSpecialization.registerXMLPaths(schema, basePath)
 end
 
 function BaleConvertSpecialization:onLoad(savegame)
+	-- print("BaleConvertSpecialization:onLoad(savegame)")
 
 	-- BaleConvertSpecialization.DebugTable("self", self);
     local xmlFile = self.xmlFile
 	
     self.spec_baleConvert = {};
     local spec =  self.spec_baleConvert;
-	spec.baleConvertItem = BaleConvertItem.new(self.isServer, self.isClient)
+	spec.baleConvertItem = BaleConvertItem.new(self.isServer, self.isClient, nil, self)
 	
 	local key = "placeable.baleConvert"
 	
@@ -234,38 +257,50 @@ function BaleConvertSpecialization:onLoad(savegame)
 end
 
 function BaleConvertSpecialization:inputTriggerCallback(triggerId, otherId, onEnter, onLeave, onStay)
+	-- print("inputTriggerCallback")
     local spec =  self.spec_baleConvert;
--- print("inputTriggerCallback")
+	-- BaleConvertSpecialization.DebugTable("spec", spec)
 	local bale = g_currentMission.nodeToObject[otherId];
 
--- BaleConvertSpecialization.DebugTable("spec", spec)
 	-- only one bale can be in the trigger. Overwrite it simply
 	if bale ~= nil and bale:isa(Bale) then
 		if onEnter then
 			if spec.baleConvertItem.baleInTrigger == nil then
 				spec.baleConvertItem.baleInTrigger = bale;
-				spec.baleConvertItem:raiseActive();
+				self:raiseActive();
 			end
 		elseif onLeave then
 			if spec.baleConvertItem.baleInTrigger == bale then
 				spec.baleConvertItem.baleInTrigger = nil;
-				spec.baleConvertItem:raiseActive();
+				self:raiseActive();
 			end
 		end
 	end
-end
-
-function BaleConvertSpecialization:onFinalizePlacement()
--- print("BaleConvertSpecialization:onFinalizePlacement()")
-	local spec =  self.spec_baleConvert;
-    -- for _, baleMoveItem in pairs(spec.baleMoveItems) do
-		spec.baleConvertItem:register(true)
-	-- end
-	
 end
 
 function BaleConvertSpecialization:onDelete()
 	local spec =  self.spec_baleConvert;
 	spec.baleConvertItem.stop = true;
 	removeTrigger(spec.baleConvertItem.triggerNodeId)
+end
+
+function BaleConvertSpecialization:onUpdate(dt)
+	-- print("BaleConvertSpecialization:onUpdate()")
+	local spec =  self.spec_baleConvert;
+	spec.baleConvertItem:update(dt)
+end
+
+function BaleConvertSpecialization:onWriteStream(streamId, connection)
+	-- print("BaleConvertSpecialization:onWriteStream()")
+	local spec = self.spec_baleConvert
+
+	streamWriteBool(streamId, spec.baleConvertItem.isTurnedOn)
+end
+
+function BaleConvertSpecialization:onReadStream(streamId, connection)
+	-- print("BaleConvertSpecialization:onReadStream()")
+	local isTurnedOn = streamReadBool(streamId)
+
+	local spec = self.spec_baleConvert;
+	spec.baleConvertItem:SetTurnOn(isTurnedOn);
 end

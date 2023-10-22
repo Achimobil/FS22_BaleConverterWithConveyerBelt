@@ -33,6 +33,8 @@ function BaleMoveItem.new(isServer, isClient, customMt)
 end
 
 function BaleMoveItem:update(dt)
+
+	-- Das Update scheint nur auf dem Server zu laufen, somit muss ich die Animation und den Sound irgendwie über die Sync laufen lassen, nur wie?
 	BaleMoveItem:superClass().update(self, dt)
 	-- print("BaleMoveItem:update(dt)")
 	
@@ -277,7 +279,7 @@ function BaleMoveSpecialization:onLoad(savegame)
 end
 
 function BaleMoveSpecialization:onBeltTriggerCallback(triggerId, otherId, onEnter, onLeave, onStay)
-print(string.format("BaleMoveSpecialization:onBeltTriggerCallback(%s, %s, %s, %s, %s)", triggerId, otherId, onEnter, onLeave, onStay))
+	-- print(string.format("BaleMoveSpecialization:onBeltTriggerCallback(%s, %s, %s, %s, %s)", triggerId, otherId, onEnter, onLeave, onStay))
     local spec =  self.spec_baleMove;
 	local currentBaleMoveItem = spec.baleMoveItems[triggerId];
 	-- print("onBeltTriggerCallback")
