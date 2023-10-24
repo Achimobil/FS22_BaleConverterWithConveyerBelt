@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <modDesc descVersion="77">
 	<author>Achimobil</author>
-	<version>1.0.0.0</version>
+	<version>1.0.0.1</version>
 	
 	<title>
 		<de>Quaderballen HD Umpacker</de>
@@ -22,6 +22,10 @@ Dies ist gültig ab der ersten Veröffentlichung des Mods im ModHub.
 
 Rückmeldungen und Fehlermeldungen bitte direkt auf <a href="https://github.com/Achimobil/FS22_BaleConverterWithConveyerBelt">GitHub</a> mit ausführlicher Beschreibung.
 Bei Fehlern im Skript dürfen die von mir veröffentlichten Skript updates ebenfalls in die eigenen Mods übernommen werden.
+
+Changelog 1.0.0.1
+- Logausgaben entfernt
+- baleConvertSpecialization umgeschrieben, so dass die Animation und der Sound auch auf dem Dedi funktioniert
 ]]></de>
 		<en><![CDATA[We have a repacking machine for square bales. 
 The bales are placed on a roller conveyor and then fed into the repacking machine.

@@ -3,7 +3,7 @@ Copyright (C) Achimobil, ab 2023
 
 Author: Achimobil
 Date: 06.09.2023
-Version: 0.1.0.0
+Version: 0.1.0.1
 
 Important:
 No changes are to be made to this script without written permission from Achimobil.
@@ -12,7 +12,6 @@ Wichtig
 An diesem Skript dürfen ohne schrifltiche Genehmigung von Achimobil keine Änderungen vorgenommen werden.
 ]]
 
--- ObjectIds.BaleMoveItem = nextObjectId()
 BaleMoveItem = {}
 local BaleMoveItem_mt = Class(BaleMoveItem, Object)
 
@@ -181,7 +180,7 @@ BaleMoveSpecialization = {
     prerequisitesPresent = function (specializations)
         return true
     end,
-    Version = "0.1.0.0",
+    Version = "0.1.0.1",
     Name = "BaleMoveSpecialization",
 }
 print(g_currentModName .. " - init " .. BaleMoveSpecialization.Name .. "(Version: " .. BaleMoveSpecialization.Version .. ")");

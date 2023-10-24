@@ -3,7 +3,7 @@ Copyright (C) Achimobil, ab 2023
 
 Author: Achimobil
 Date: 06.09.2023
-Version: 0.1.0.0
+Version: 0.1.0.1
 
 Important:
 No changes are to be made to this script without written permission from Achimobil.
@@ -12,10 +12,8 @@ Wichtig
 An diesem Skript dürfen ohne schrifltiche Genehmigung von Achimobil keine Änderungen vorgenommen werden.
 ]]
 
-
 BaleConvertItem = {}
 local BaleConvertItem_mt = Class(BaleConvertItem, Object)
-
 
 function BaleConvertItem.new(isServer, isClient, customMt, parent)
 	-- print(string.format("BaleConvertItem.new(%s,%s,%s,%s)", isServer, isClient, customMt, parent))
@@ -173,7 +171,7 @@ BaleConvertSpecialization = {
     prerequisitesPresent = function (specializations)
         return true
     end,
-    Version = "0.1.0.0",
+    Version = "0.1.0.1",
     Name = "BaleConvertSpecialization",
 }
 print(g_currentModName .. " - init " .. BaleConvertSpecialization.Name .. "(Version: " .. BaleConvertSpecialization.Version .. ")");
