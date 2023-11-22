@@ -2,8 +2,8 @@
 Copyright (C) Achimobil, ab 2023
 
 Author: Achimobil
-Date: 06.09.2023
-Version: 0.1.0.1
+Date: 22.11.2023
+Version: 0.2.0.0
 
 Important:
 No changes are to be made to this script without written permission from Achimobil.
@@ -15,9 +15,13 @@ An diesem Skript dürfen ohne schrifltiche Genehmigung von Achimobil keine Ände
 BaleMoveItem = {}
 local BaleMoveItem_mt = Class(BaleMoveItem, Object)
 
-function BaleMoveItem.new(isServer, isClient, customMt)
-	-- print(string.format("BaleMoveItem.new(%s,%s,%s)", isServer, isClient, customMt))
-	local self = Object.new(isServer, isClient, customMt or BaleMoveItem_mt)
+function BaleMoveItem.new(isServer, isClient, customMt, parent)
+	-- print(string.format("BaleMoveItem.new(%s,%s,%s,%s)", isServer, isClient, customMt, parent))
+	local self = setmetatable({}, customMt or BaleMoveItem_mt)
+	self.isServer = isServer;
+	self.isClient = isClient;
+	self.parent = parent;
+	
 	self.onBeltTriggerId = nil
 	self.balesOnBelt = {}
 	self.balesOnBeltCount = 0
@@ -27,6 +31,7 @@ function BaleMoveItem.new(isServer, isClient, customMt)
 	self.baleInStopTrigger = {}
 	self.baleInStopTriggerCount = 0
 	self.soundIsOn = false;
+	self.isTurnedOn = false;
 
 	return self
 end
@@ -76,29 +81,31 @@ function BaleMoveItem:update(dt)
 		end
 	end
 		
-	for _, animation in ipairs(self.uvAnimations) do
-		if self.stop == true then return end;
-		animation.current = (animation.current + dt * self.motorSpeed * 0.001 * animation.to * animation.speed) % animation.to
-		local x, y, z, w = getShaderParameter(animation.node, "offsetUV")
+	if self.isClient then 
+		for _, animation in ipairs(self.uvAnimations) do
+			if self.stop == true then return end;
+			animation.current = (animation.current + dt * self.motorSpeed * 0.001 * animation.to * animation.speed) % animation.to
+			local x, y, z, w = getShaderParameter(animation.node, "offsetUV")
 
-		if animation.parameter == 0 then
-			setShaderParameter(animation.node, "offsetUV", animation.current, y, z, w, false)
-		elseif animation.parameter == 2 then
-			setShaderParameter(animation.node, "offsetUV", x, y, animation.current, w, false)
+			if animation.parameter == 0 then
+				setShaderParameter(animation.node, "offsetUV", animation.current, y, z, w, false)
+			elseif animation.parameter == 2 then
+				setShaderParameter(animation.node, "offsetUV", x, y, animation.current, w, false)
+			end
 		end
-	end
-	
-	if self.balesOnBeltCount > 0 then 
-		self:PlaySound(true);
-		self:raiseActive();
-	else
-		self:PlaySound(false);
+		
+		if self.balesOnBeltCount > 0 then 
+			self:PlaySound(true);
+			self.parent:raiseActive();
+		else
+			self:PlaySound(false);
+		end
 	end
 end
 
 function BaleMoveItem:PlaySound(animationRunning)
 	-- print(string.format("BaleMoveItem:PlaySound count:%s shouldRun:%s IsRuning:%s", self.balesOnBeltCount, animationRunning, self.soundIsOn))
-
+	self.isTurnedOn = animationRunning;
 	-- sound hier einstellen, damit das unten weiterhin einfach ein return machen kann, wenn der rest weg fällt
 	if animationRunning and not self.soundIsOn then
 		-- war aus und läuft gerade an
@@ -148,7 +155,6 @@ function BaleMoveItem:addBaleJoint(baleInfo)
 	end
 end
 
-
 function BaleMoveItem:onDynamicMountJointBreak(jointIndex, breakingImpulse)
 	local baleInfo = self.jointToInfo[jointIndex]
 
@@ -167,7 +173,14 @@ function BaleMoveItem:removeBaleJoint(baleInfo)
 	end
 end
 
-
+function BaleMoveItem:SetTurnOn(isTurnedOn, noEventSend)
+	-- print(string.format("BaleMoveItem.SetTurnOn(%s, %s)", isTurnedOn, noEventSend))
+		
+	if self.isTurnedOn ~= isTurnedOn then
+		-- bei status änderung aktivieren, rest macht dann die update
+		self:raiseActive()
+	end
+end
 
 
 
@@ -180,7 +193,7 @@ BaleMoveSpecialization = {
     prerequisitesPresent = function (specializations)
         return true
     end,
-    Version = "0.1.0.1",
+    Version = "0.2.0.0",
     Name = "BaleMoveSpecialization",
 }
 print(g_currentModName .. " - init " .. BaleMoveSpecialization.Name .. "(Version: " .. BaleMoveSpecialization.Version .. ")");
@@ -204,7 +217,9 @@ end
 function BaleMoveSpecialization.registerEventListeners(placeableType)
     SpecializationUtil.registerEventListener(placeableType, "onLoad", BaleMoveSpecialization)
 	SpecializationUtil.registerEventListener(placeableType, "onDelete", BaleMoveSpecialization)
-	SpecializationUtil.registerEventListener(placeableType, "onFinalizePlacement", BaleMoveSpecialization)
+	SpecializationUtil.registerEventListener(placeableType, "onUpdate", BaleMoveSpecialization)
+	SpecializationUtil.registerEventListener(placeableType, "onReadStream", BaleMoveSpecialization)
+	SpecializationUtil.registerEventListener(placeableType, "onWriteStream", BaleMoveSpecialization)
 end
 
 function BaleMoveSpecialization.registerXMLPaths(schema, basePath)
@@ -240,7 +255,7 @@ function BaleMoveSpecialization:onLoad(savegame)
     local xmlFile = self.xmlFile
 	
 	xmlFile:iterate("placeable.baleMoves.baleMove", function (_, key)
-		local baleMoveItem = BaleMoveItem.new(self.isServer, self.isClient)
+		local baleMoveItem = BaleMoveItem.new(self.isServer, self.isClient, nil, self)
 		baleMoveItem.onBeltTriggerId = xmlFile:getValue(key .. "#onBeltTrigger", nil, self.components, self.i3dMappings);
 		baleMoveItem.beltJointBaseNode = xmlFile:getValue(key .. "#jointBaseNode", nil, self.components, self.i3dMappings)
 		baleMoveItem.beltAnchorNode = xmlFile:getValue(key .. "#anchorNode", nil, self.components, self.i3dMappings)
@@ -299,7 +314,7 @@ function BaleMoveSpecialization:onBeltTriggerCallback(triggerId, otherId, onEnte
 				if bale.addDeleteListener ~= nil then
 					bale:addDeleteListener(self, "onDeleteBale")
 				end
-				currentBaleMoveItem:raiseActive();
+				self:raiseActive();
 			end
 		elseif onLeave then
 			local info = currentBaleMoveItem.balesOnBelt[bale]
@@ -312,7 +327,7 @@ function BaleMoveSpecialization:onBeltTriggerCallback(triggerId, otherId, onEnte
 				if bale.removeDeleteListener ~= nil then
 					bale:removeDeleteListener(self, "onDeleteBale")
 				end
-				currentBaleMoveItem:raiseActive();
+				self:raiseActive();
 			end
 		end
 	end
@@ -349,15 +364,6 @@ function BaleMoveSpecialization:onStopTriggerCallback(triggerId, otherId, onEnte
 	
 end
 
-function BaleMoveSpecialization:onFinalizePlacement()
--- print("BaleMoveSpecialization:onFinalizePlacement()")
-	local spec =  self.spec_baleMove;
-    for _, baleMoveItem in pairs(spec.baleMoveItems) do
-		baleMoveItem:register(true)
-	end
-	
-end
-
 function BaleMoveSpecialization:onDelete()
 	local spec =  self.spec_baleMove;
     for _, baleMoveItem in pairs(spec.baleMoveItems) do
@@ -374,7 +380,7 @@ function BaleMoveSpecialization:onDeleteBale(object)
 		if baleMoveItem.balesOnBelt[object] ~= nil then
 			baleMoveItem.balesOnBelt[object] = nil
 			baleMoveItem.balesOnBeltCount = baleMoveItem.balesOnBeltCount - 1;
-			baleMoveItem:raiseActive();
+			self:raiseActive();
 		end
 	end
 end
@@ -388,4 +394,34 @@ function BaleMoveSpecialization:onDeleteBaleFromStop(object)
 			baleMoveItem.baleInStopTriggerCount = baleMoveItem.baleInStopTriggerCount - 1;
 		end
 	end
+end
+
+function BaleMoveSpecialization:onUpdate(dt)
+	-- print("BaleConvertSpecialization:onUpdate()")
+	local spec =  self.spec_baleMove;
+	for _, baleMoveItem in pairs(spec.baleMoveItems) do
+		baleMoveItem:update(dt)
+	end
+end
+
+function BaleMoveSpecialization:onWriteStream(streamId, connection)
+	-- print("BaleConvertSpecialization:onWriteStream()")
+	local spec = self.spec_baleMove
+
+	for _, baleMoveItem in pairs(spec.baleMoveItems) do
+		streamWriteBool(streamId, baleMoveItem.isTurnedOn)
+	end
+	
+end
+
+function BaleMoveSpecialization:onReadStream(streamId, connection)
+	-- print("BaleConvertSpecialization:onReadStream()")
+	
+
+	local spec = self.spec_baleMove;
+	for _, baleMoveItem in pairs(spec.baleMoveItems) do
+		local isTurnedOn = streamReadBool(streamId)
+		baleMoveItem:SetTurnOn(isTurnedOn);
+	end
+	
 end

@@ -2,8 +2,8 @@
 Copyright (C) Achimobil, ab 2023
 
 Author: Achimobil
-Date: 06.09.2023
-Version: 0.1.0.1
+Date: 22.11.2023
+Version: 0.2.0.0
 
 Important:
 No changes are to be made to this script without written permission from Achimobil.
@@ -171,7 +171,7 @@ BaleConvertSpecialization = {
     prerequisitesPresent = function (specializations)
         return true
     end,
-    Version = "0.1.0.1",
+    Version = "0.2.0.0",
     Name = "BaleConvertSpecialization",
 }
 print(g_currentModName .. " - init " .. BaleConvertSpecialization.Name .. "(Version: " .. BaleConvertSpecialization.Version .. ")");
